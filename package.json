@@ -22,7 +22,5 @@
     "url": "https://github.com/ixd-teaching/pose-detection/issues"
   },
   "homepage": "https://github.com/ixd-teaching/pose-detection#readme",
-  "dependencies": {
-    "@tensorflow-models/posenet": "^2.2.1"
-  }
+  "dependencies": {}
 }
