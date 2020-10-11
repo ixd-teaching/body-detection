@@ -4,7 +4,9 @@ const timeout = 50000
 
 bodies.addEventListener('bodiesDetected', (e) => {
     // @ts-ignore
-    console.log(e.detail.bodies.getBodyAt(0).getBodyPart(bodyParts.leftShoulder).position)
+    const body = e.detail.bodies.getBodyAt(0)
+    //console.log(body.getBodyPart(bodyParts.leftShoulder).position)
+    console.log(body.getDistanceBetweenBodyParts(bodyParts.leftWrist, bodyParts.rightWrist))
 })
 
 bodies.start(timeout)
