@@ -20,7 +20,7 @@ Bodies contain all data and methods with regard to bodies detected in one video 
 Body contain all data and methods with regard to a single body detected in a video snapshot, i.e. body parts and confidence score. The Body class also has methods for relating body parts to each other (e.g. distance between them).
 
 *Class BodyPart*
-BodyPart contain all data and methods with regard to a single bodypart, i.e. that is postion, speed and confidence score.
+BodyPart contain all data and methods with regard to a single bodypart (e.g. left knee), which is postion, speed and confidence score.
 
 *Object bodyParts*
 The object bodyParts enumerates all body parts. When body parts referenced we should use the names in bodyParts, e.g. 'bodyParts.leftFoot'
@@ -63,18 +63,14 @@ Bodies.getNumOfBodies() returns the number of bodies detected.
 
 Bodies.getBodyAt(index) retrieves a particular body of the class 'Body'
 
-The 'Body' class contains data on all body parts of class 'BodyPart' and a confidence score for the body detected
-
-A particular body part can be retrieved by calling Body.bodyPart(bodyPartName) and all body part names are found in the object 'bodyParts'. If we want to retrieve data for the right knee, we can write:
+A particular body part can be retrieved by calling Body.bodyPart(bodyPartName). If we want to retrieve data for the right knee, we can write:
 
 ~~~
 body.getBodyPart(bodyParts.rightKnee)
 ~~~
 
-The BodyPart class contains data on the body part: position, speed and confidence score.
-
 The distance between two bodyparts can be retrieved by calling:
 
-~~~
+~~~javascript
 Body.getDistanceBetweenBodyParts(bodyParts.leftWrist, bodyParts.rightWrist)
 ~~~
