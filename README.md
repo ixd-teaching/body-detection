@@ -11,7 +11,7 @@ Sketches that exemplifies use of the framework are found in 'sketches'
 The important classes and objects in the framework are:
 
 *Class BodyStream*
-Bodystream load and sets up the model by hooking it up to the webcam via the video element. When setup and started it emits continously data on bodies found in snapshots of the videostream via the event 'bodiesDetected'.
+Bodystream loads and sets up the model by hooking it up to the webcam via the video element. When first setup and started it will emit  data on bodies found in snapshots of the videostream continously via the event 'bodiesDetected'.
 
 *Class Bodies*
 Bodies contain all data and methods with regard to bodies detected in one video snapshot. 
