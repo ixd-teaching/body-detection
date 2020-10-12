@@ -1,5 +1,8 @@
 // @ts-nocheck
 
+
+/* ----- setup ------ */
+
 // sets up a bodystream with configuration object
 const bodies = new BodyStream ({
       posenet: posenet,
@@ -48,6 +51,9 @@ function drawCameraIntoCanvas() {
     requestAnimationFrame(drawCameraIntoCanvas)
 }
 
-requestAnimationFrame(drawCameraIntoCanvas)
+/* ----- run ------ */
 
+// start body detecting 
 bodies.start()
+// draw video and body parts into canvas continously 
+drawCameraIntoCanvas();

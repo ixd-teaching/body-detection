@@ -1,5 +1,12 @@
 // @ts-nocheck
 
+
+/* ----- setup ------ */
+
+const video = document.getElementById("video");
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+
 // sets up a bodystream with configuration object
 const bodies = new BodyStream ({
       posenet: posenet,
@@ -10,18 +17,10 @@ const bodies = new BodyStream ({
 
 let body
 
-// when a nose is detected get nose data
+// when a body is detected get body data
 bodies.addEventListener('bodiesDetected', (e) => {
     body = e.detail.bodies.getBodyAt(0)
 })
-
-// start body detecting 
-bodies.start()
-
-// get elements
-const video = document.getElementById("video");
-const canvas = document.getElementById("canvas");
-const ctx = canvas.getContext("2d");
 
 // draw the video, nose and eyes into the canvas
 function drawCameraIntoCanvas() {
@@ -45,12 +44,8 @@ function drawCameraIntoCanvas() {
    drawStar(leftEye.position.x, leftEye.position.y, 5, 5, 13, 'yellow')
    drawStar(rightEye.position.x, rightEye.position.y, 5, 5, 13, 'yellow')
  }
-
   window.requestAnimationFrame(drawCameraIntoCanvas);
 }
-
-// start looping drawing video and nose into canvas 
-drawCameraIntoCanvas();
 
 // helper function to draw a star
 function drawStar(cx, cy, spikes, outerRadius, innerRadius, color) {
@@ -77,3 +72,11 @@ function drawStar(cx, cy, spikes, outerRadius, innerRadius, color) {
   ctx.fillStyle = color
   ctx.fill()
 }
+
+
+/* ----- run ------ */
+
+// start body detecting 
+bodies.start()
+// draw video and body parts into canvas continously 
+drawCameraIntoCanvas();
