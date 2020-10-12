@@ -37,7 +37,7 @@ const bodies = new BodyStream ({
       samplingRate: 250})
 ~~~
 
-The actual detection is started by calling and it stops when timeout runs out:
+The actual detection is started by calling BodyStream.start and it stops when timeout runs out:
 
 ~~~
 BodyStream.start(timeout) 
