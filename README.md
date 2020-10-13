@@ -11,19 +11,19 @@ Sketches that exemplifies use of the framework are found in 'sketches'
 ### Important classes and objects 
 The important classes and objects in the framework are:
 
-*Class BodyStream*
+*Class BodyStream:*
 Bodystream loads and sets up the model by hooking it up to the webcam via the video element. When first setup and started it will emit  data on bodies found in snapshots of the videostream continously via the event 'bodiesDetected'.
 
-*Class Bodies*
+*Class Bodies:*
 Bodies contain all data and methods with regard to bodies detected in one video snapshot. 
 
-*Class Body*
+*Class Body:*
 Body contain all data and methods with regard to a single body detected in a video snapshot, i.e. body parts and confidence score. The Body class also has methods for relating body parts to each other (e.g. distance between them).
 
-*Class BodyPart*
+*Class BodyPart:*
 BodyPart contain all data and methods with regard to a single bodypart (e.g. left knee), which is postion, speed and confidence score.
 
-*Object bodyParts*
+*Object bodyParts:*
 The object bodyParts enumerates all body parts. When body parts referenced we should use the names in bodyParts, e.g. 'bodyParts.leftFoot'
 
 ### Usage
