@@ -24,7 +24,7 @@ Body contain all data and methods with regard to a single body detected in a vid
 BodyPart contain all data and methods with regard to a single bodypart (e.g. left knee), which is postion, speed and confidence score.
 
 *Object bodyParts:*
-The object bodyParts enumerates all body parts. When body parts referenced we should use the names in bodyParts, e.g. 'bodyParts.leftFoot'.
+The object bodyParts enumerates all body parts. When body parts are referenced we should use the names in bodyParts, e.g. 'bodyParts.leftFoot'.
 
 ### Usage
 To setup body detection instatiate a new object of the class 'Bodystream' with a configuration object:
