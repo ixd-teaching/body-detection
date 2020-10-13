@@ -5,8 +5,8 @@
 The framework uses tenserflow.js/posenet to detect one or more bodies from the browser's camera and emmits positional data for each body's body parts of which there are 17. The framework can use either of two model architectures from posenet: 'MobileNetV1' (default) or 'ResNet50'. ResNet50 is more precise, but also slower and consumes more resources. The framework can be configured to detect either a single body or multiple bodies in the camera stream. When one or more bodies are detected an array of body data is emitted to all listeners.
 
 ### Files and folders
-The framework is found 'lib/bodydetection.js'
-Sketches that exemplifies use of the framework are found in 'sketches'
+The framework is found 'lib/bodydetection.js'.
+Sketches that exemplifies use of the framework are found in 'sketches'.
 
 ### Important classes and objects 
 The important classes and objects in the framework are:
@@ -24,7 +24,7 @@ Body contain all data and methods with regard to a single body detected in a vid
 BodyPart contain all data and methods with regard to a single bodypart (e.g. left knee), which is postion, speed and confidence score.
 
 *Object bodyParts:*
-The object bodyParts enumerates all body parts. When body parts referenced we should use the names in bodyParts, e.g. 'bodyParts.leftFoot'
+The object bodyParts enumerates all body parts. When body parts referenced we should use the names in bodyParts, e.g. 'bodyParts.leftFoot'.
 
 ### Usage
 To setup body detection instatiate a new object of the class 'Bodystream':
@@ -58,11 +58,11 @@ bodies.addEventListener('bodiesDetected', (e) => {
 })
 ~~~
 
-The list of bodies is accessible from e.detail.bodies and is of class 'Bodies'
+The list of bodies is accessible from e.detail.bodies and is of class 'Bodies'.
 
 Bodies.getNumOfBodies() returns the number of bodies detected.
 
-Bodies.getBodyAt(index) retrieves a particular body of the class 'Body'
+Bodies.getBodyAt(index) retrieves a particular body of the class 'Body'.
 
 A particular body part can be retrieved by calling Body.bodyPart(bodyPartName). If we want to retrieve data for the right knee, we can write:
 
