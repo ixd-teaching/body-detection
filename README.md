@@ -27,7 +27,7 @@ BodyPart contain all data and methods with regard to a single bodypart (e.g. lef
 The object bodyParts enumerates all body parts. When body parts referenced we should use the names in bodyParts, e.g. 'bodyParts.leftFoot'.
 
 ### Usage
-To setup body detection instatiate a new object of the class 'Bodystream':
+To setup body detection instatiate a new object of the class 'Bodystream' with a configuration object:
 
 ~~~
 const bodies = new BodyStream ({
