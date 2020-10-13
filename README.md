@@ -1,6 +1,7 @@
 ## Web framework to play with dynamic body pose detection
 
-#### Description
+### Description
+
 The framework uses tenserflow.js/posenet to detect one or more bodies from the browser's camera and emmits positional data for each body's body parts of which there are 17. The framework can use either of two model architectures from posenet: 'MobileNetV1' (default) or 'ResNet50'. ResNet50 is more precise, but also slower and consumes more resources. The framework can be configured to detect either a single body or multiple bodies in the camera stream. When one or more bodies are detected an array of body data is emitted to all listeners.
 
 ### Files and folders
@@ -74,3 +75,14 @@ The distance between two bodyparts can be retrieved by calling:
 ~~~javascript
 Body.getDistanceBetweenBodyParts(bodyParts.leftWrist, bodyParts.rightWrist)
 ~~~
+
+### Resources
+To read more about use and configuration of tensorflow.js/posenet and Tensorflow in general:
+
+*tenserflow.js/posenet*
+
+https://github.com/tensorflow/tfjs-models/tree/master/posenet
+
+*Tensorflow*
+
+https://www.tensorflow.org/
