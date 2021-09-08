@@ -76,7 +76,7 @@ The distance between two bodyparts can be retrieved by calling:
 Body.getDistanceBetweenBodyParts(bodyParts.leftWrist, bodyParts.rightWrist)
 ~~~
 
-Body partst are defined as follows:
+Body parts are defined as follows:
 
 ~~~javascript
 const bodyParts = {
