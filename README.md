@@ -2,7 +2,7 @@
 
 ### Description
 
-The framework uses tenserflow.js/posenet to detect one or more 'bodies' from the browser's camera and emits positional data for each body's body parts of which there are 17. The framework can use either of two model architectures from posenet: 'MobileNetV1' (default) or 'ResNet50'. ResNet50 is more precise, but also slower and consumes more resources. The framework can be configured to detect either a single body or multiple bodies in the camera stream. When one or more bodies are detected an array of body data is emitted to all listeners.
+The framework uses tenserflow.js/posenet to detect one or more 'bodies' from the browser's camera and emits positional data for each body's parts (e.g. 'left wrist', 'right wrist', 'nose', etc.). The framework can use either of two model architectures from posenet: 'MobileNetV1' (default) or 'ResNet50'. ResNet50 is more precise, but also slower and consumes more resources. The framework can be configured to detect either a single body or multiple bodies in the camera stream. When one or more bodies are detected an array of body data is emitted to all listeners. 
 
 ### Files and folders
 The framework is found in 'lib/bodydetection.js'.
@@ -74,6 +74,30 @@ The distance between two bodyparts can be retrieved by calling:
 
 ~~~javascript
 Body.getDistanceBetweenBodyParts(bodyParts.leftWrist, bodyParts.rightWrist)
+~~~
+
+Body partst are defined as follows:
+
+~~~javascript
+const bodyParts = {
+    nose: "nose",
+    leftEye: "leftEye",
+    rightEye: "rightEye",
+    leftEar: "leftEar",
+    rightEar: "rightEar",
+    leftShoulder: "leftShoulder",
+    rightShoulder: "rightShoulder",
+    leftElbow: "leftElbow",
+    rightElbow: "rightElbow",
+    leftWrist: "leftWrist",
+    rightWrist: "rightWrist",
+    leftHip: "leftHip",
+    rightHip: "rightHip",
+    leftKnee: "leftKnee",
+    rightKnee: "rightKnee",
+    leftAnkle: "leftAnkle",
+    rightAnkle: "rightAnkle"
+}
 ~~~
 
 ### Resources
