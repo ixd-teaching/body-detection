@@ -62,7 +62,7 @@ The list of bodies is accessible from e.detail.bodies and is of class 'Bodies'.
 
 Bodies.getNumOfBodies() returns the number of bodies detected.
 
-Bodies.getBodyAt(index) retrieves a particular body of the class 'Body'.
+Bodies.getBodyAt(index) retrieves a particular body of the class 'Body'. The first body detected in a frame has index value 0.
 
 A particular body part can be retrieved by calling Body.bodyPart(bodyPartName). If we want to retrieve data for the right knee, we can write:
 
