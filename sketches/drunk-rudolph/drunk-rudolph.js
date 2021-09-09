@@ -7,21 +7,8 @@ const video = document.getElementById("video");
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
-// sets up a bodystream with configuration object
-const bodyStream = new BodyStream ({
-      posenet: posenet,
-      architecture: modelArchitecture.MobileNetV1, 
-      detectionType: detectionType.singleBody, 
-      videoElement: document.getElementById('video'), 
-      samplingRate: 250})
-
 // global variable that holds latest detected body in camera stream
 let body
-
-// listen for bodies detected and set global variable 'body' when a body is found
-bodyStream.addEventListener('bodiesDetected', (e) => {
-    body = e.detail.bodies.getBodyAt(0)
-})
 
 // draw the video frame with nose and eyes onto canvas
 function drawCameraFrameOntoCanvas() {
@@ -76,9 +63,25 @@ function drawStar(cx, cy, spikes, outerRadius, innerRadius, color) {
 }
 
 
-/* ----- run ------ */
+/* ----- setup bodystream and run  ------ */
+
+
+// sets up a bodystream with configuration object
+const bodyStream = new BodyStream({
+  posenet: posenet,
+  architecture: modelArchitecture.MobileNetV1,
+  detectionType: detectionType.singleBody,
+  videoElement: document.getElementById('video'),
+  samplingRate: 250
+})
+
+// listen for bodies detected and set global variable 'body' when a body is found
+bodyStream.addEventListener('bodiesDetected', (e) => {
+  body = e.detail.bodies.getBodyAt(0)
+})
 
 // start body detecting 
 bodyStream.start()
+
 // draw video and body parts into canvas continuously 
 drawCameraFrameOntoCanvas();

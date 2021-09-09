@@ -3,24 +3,8 @@
 
 /* ----- setup ------ */
 
-// sets up a bodystream with configuration object
-const bodyStream = new BodyStream({
-    posenet: posenet,
-    architecture: modelArchitecture.MobileNetV1,
-    detectionType: detectionType.singleBody,
-    videoElement: document.getElementById('video'),
-    samplingRate: 250
-})
 
 let body
-
-// listen for bodies detected and set global variable 'body' when a body is found and calculate distance between wrists
-bodyStream.addEventListener('bodiesDetected', (e) => {
-    body = e.detail.bodies.getBodyAt(0);
-    const distance = Math.round(body.getDistanceBetweenBodyParts(bodyParts.leftWrist, bodyParts.rightWrist));
-    document.getElementById('output').innerText = `Distance between wrists: ${distance}`;
-    body.getDistanceBetweenBodyParts(bodyParts.leftWrist, bodyParts.rightWrist);
-})
 
 // get elements
 let video = document.getElementById("video")
@@ -39,23 +23,51 @@ function drawCameraIntoCanvas() {
         const rightWrist = body.getBodyPart(bodyParts.rightWrist)
 
         // draw left wrist
-        ctx.beginPath();
+        ctx.beginPath()
         ctx.arc(leftWrist.position.x, leftWrist.position.y, 10, 0, 2 * Math.PI)
         ctx.fillStyle = 'white'
         ctx.fill()
 
         // draw right wrist
-        ctx.beginPath();
+        ctx.beginPath()
         ctx.arc(rightWrist.position.x, rightWrist.position.y, 10, 0, 2 * Math.PI)
         ctx.fillStyle = 'white'
         ctx.fill()
     }
+
+    // 
+    outputDistance ()
+
     requestAnimationFrame(drawCameraIntoCanvas)
 }
 
-/* ----- run ------ */
+function outputDistance() {
+    if (body != null) {
+        const distance = Math.round(body.getDistanceBetweenBodyParts(bodyParts.leftWrist, bodyParts.rightWrist));
+        document.getElementById('output').innerText = `Distance between wrists: ${distance}`;
+        body.getDistanceBetweenBodyParts(bodyParts.leftWrist, bodyParts.rightWrist);
+    }
+}
+
+
+/* ----- setup bodystream and run ------ */
+
+// sets up a bodystream with configuration object
+const bodyStream = new BodyStream({
+    posenet: posenet,
+    architecture: modelArchitecture.MobileNetV1,
+    detectionType: detectionType.singleBody,
+    videoElement: document.getElementById('video'),
+    samplingRate: 250
+})
+
+// listen for bodies detected and set global variable 'body' when a body
+bodyStream.addEventListener('bodiesDetected', (e) => {
+    body = e.detail.bodies.getBodyAt(0)
+})
 
 // start body detecting 
 bodyStream.start()
+
 // draw video and body parts into canvas continously 
 drawCameraIntoCanvas();
