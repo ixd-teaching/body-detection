@@ -72,7 +72,7 @@ const bodyStream = new BodyStream({
   architecture: modelArchitecture.MobileNetV1,
   detectionType: detectionType.singleBody,
   videoElement: document.getElementById('video'),
-  samplingRate: 250
+  samplingRate: 100
 })
 
 // listen for bodies detected and set global variable 'body' when a body is found
