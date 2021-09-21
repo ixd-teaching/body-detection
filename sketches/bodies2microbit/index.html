@@ -2,14 +2,13 @@
 
 <head>
    <meta charset="UTF-8">
-   <title>Wrist distance</title>
+   <title>Microbit Serial Communication</title>
 
    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/posenet"></script>
    <script src="https://unpkg.com/rxjs@^7/dist/bundles/rxjs.umd.min.js"></script>
    <script src="../../lib/bodydetection.js"></script>
-   <script src="serial.js"></script>
-   
+
 </head>
 
 <body>
@@ -26,17 +25,18 @@
 
       // ---- setup and run body detection ----------------------------------------------------
       const bodyStream = new BodyStream({
-            posenet: posenet,
-            architecture: modelArchitecture.MobileNetV1,
-            detectionType: detectionType.singleBody,
-            videoElement: document.getElementById('video'),
-            samplingRate: 250
+         posenet: posenet,
+         architecture: modelArchitecture.MobileNetV1,
+         detectionType: detectionType.singleBody,
+         videoElement: document.getElementById('video'),
+         samplingRate: 1000
       })
 
       // global
       let body
       let writer
       let port
+      let count = 0
       let connected = false
 
       // get elements
@@ -70,36 +70,42 @@
          requestAnimationFrame(drawCameraIntoCanvas)
       }
 
-      function serializeBody(body) {
 
-         function serializeBodyPart(name) {
-            let bodyPart = body.getBodyPart(name)
-            return `:${name},${bodyPart.position.x},${bodyPart.position.y},${bodyPart.speed.absoluteSpeed},${bodyPart.confidenceScore}`
+      function serializeBodyPart(name, body) {
+         let bodyPart = body.getBodyPart(name)
+         return `${name},${bodyPart.position.x},${bodyPart.position.y},${bodyPart.speed.absoluteSpeed},${bodyPart.confidenceScore}\n`
+      }
+
+
+
+      async function writeAndLog(s) {
+         console.log(s)
+         if (connected) {
+            await writer.write(s)
          }
-
-         return Object.values(bodyParts).reduce((prev, curr, index) =>
-            index === 1 ? serializeBodyPart(prev) + serializeBodyPart(curr) : prev + serializeBodyPart(curr)
-         ) + "\n"
       }
 
       // listen for bodies detected and send them to microbit if connected
       bodyStream.addEventListener('bodiesDetected', async (e) => {
-         body = e.detail.bodies.getBodyAt(0)
-         let serializedBody = serializeBody(body)
-         // log serialized body
-         console.log(serializedBody)
 
-         // send serialized body to microbit if connected
-         if (connected) 
-            await writer.write(serializedBody)
+
+
+         body = e.detail.bodies.getBodyAt(0)
+
+         writeAndLog(serializeBodyPart(bodyParts.nose, body))
+         writeAndLog(serializeBodyPart(bodyParts.leftEye, body))
+         writeAndLog(serializeBodyPart(bodyParts.rightEye, body))
+         //     writeAndLog(serializeBodyPart(bodyParts.leftShoulder, body))
+         //      writeAndLog(serializeBodyPart(bodyParts.rightShoulder, body))
+
       })
 
       // start body detecting 
       bodyStream.start()
-    
+
       // draw video and body parts into canvas continously 
       drawCameraIntoCanvas()
-   
+
       // ---- setup serial connection and send body data when ready -----------------------------------
 
 
@@ -113,12 +119,13 @@
          if (connected) {
             connectPortBtn.innerText = "Disconnecting..."
             try {
-                await writer.releaseLock()
+               await writer.releaseLock()
             } catch (err) {
                console.error(err)
             }
             try {
                await writer.close()
+
             } catch (err) {
                console.error(err)
             }
@@ -128,7 +135,7 @@
                console.error(err)
             }
             connected = false
-         } 
+         }
          else {
             try {
                connectPortBtn.innerText = "Connecting..."
