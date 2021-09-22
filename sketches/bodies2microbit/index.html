@@ -10,15 +10,60 @@
    <script src="../../lib/bodydetection.js"></script>
 
 </head>
+<style>
+   .wrapper {
+      display: grid;
+      grid-template-columns: 150px 150px 150px 150px;
+      grid-template-rows: auto auto auto;
+   }
+</style>
 
 <body>
-   <canvas id="canvas" width="640" height="480"></canvas>
-   <video id="video" width="640" height="480" autoplay style="display: none"></video>
+   <canvas id="canvas"></canvas>
+   <video id="video" autoplay style="display: none"></video>
    <div id="output"></div>
    <div>
       <p style="text-align: left;">
          <button id="connectBtn">Connect</button>
       </p>
+      <div class="wrapper" style="display: grid" width="640" style="background-color: red">
+         <div class="bodyPartCheck"><input type="checkbox" name="bodyPart" id="nose" checked><label
+               for="nose">Nose</label>
+         </div>
+         <div class="bodyPartCheck"><input type="checkbox" name="bodyPart" id="leftEye"><label for="leftEye">Left
+               eye</label></div>
+         <div class="bodyPartCheck"><input type="checkbox" name="bodyPart" id="rightEye"><label for="rightEye">Right
+               eye</label></div>
+         <div class="bodyPartCheck"><input type="checkbox" name="bodyPart" id="leftEar"><label for="leftEar">Left
+               ear</label></div>
+         <div class="bodyPartCheck"><input type="checkbox" name="bodyPart" id="rightEar"><label for="rightEar">Right
+               ear</label></div>
+         <div class="bodyPartCheck"><input type="checkbox" name="bodyPart" id="leftShoulder"><label
+               for="leftShoulder">Left
+               shoulder</label></div>
+         <div class="bodyPartCheck"><input type="checkbox" name="bodyPart" id="rightShoulder"><label
+               for="rightShoulder">Right shoulder</label></div>
+         <div class="bodyPartCheck"><input type="checkbox" name="bodyPart" id="leftElbow"><label for="leftElbow">Left
+               elbow</label></div>
+         <div class="bodyPartCheck"><input type="checkbox" name="bodyPart" id="rightElbow"><label for="rightElbow">Right
+               elbow</label></div>
+         <div class="bodyPartCheck"><input type="checkbox" name="bodyPart" id="leftWrist"><label for="leftWrist">Left
+               wrist</label></div>
+         <div class="bodyPartCheck"><input type="checkbox" name="bodyPart" id="rightWrist"><label for="rightWrist">Right
+               wrist</label></div>
+         <div class="bodyPartCheck"><input type="checkbox" name="bodyPart" id="leftHip"><label for="leftHip">Left
+               hip</label></div>
+         <div class="bodyPartCheck"><input type="checkbox" name="bodyPart" id="rightHip"><label for="rightHip">Right
+               hip</label></div>
+         <div class="bodyPartCheck"><input type="checkbox" name="bodyPart" id="leftKnee"><label for="leftKnee">Left
+               knee</label></div>
+         <div class="bodyPartCheck"><input type="checkbox" name="bodyPart" id="rightKnee"><label for="rightKnee">Right
+               knee</label></div>
+         <div class="bodyPartCheck"><input type="checkbox" name="bodyPart" id="leftAnkle"><label for="leftAnkle">Left
+               ankle</label></div>
+         <div class="bodyPartCheck"><input type="checkbox" name="bodyPart" id="rightAnkle"><label for="rightAnkle">Right
+               ankle</label></div>
+      </div>
    </div>
 
    <script>
@@ -29,7 +74,7 @@
          architecture: modelArchitecture.MobileNetV1,
          detectionType: detectionType.singleBody,
          videoElement: document.getElementById('video'),
-         samplingRate: 1000
+         samplingRate: 500
       })
 
       // global
@@ -43,6 +88,14 @@
       let video = document.getElementById("video")
       let canvas = document.getElementById("canvas")
       let ctx = canvas.getContext("2d")
+      video.width = inputResolution.width
+      video.height = inputResolution.height
+      canvas.height = inputResolution.height
+      canvas.width = inputResolution.width
+
+      function bodyPartEnabled(name) {
+         return document.getElementById(name).checked
+      }
 
       // draw the video, nose and eyes into the canvas
       function drawCameraIntoCanvas() {
@@ -51,26 +104,46 @@
          ctx.drawImage(video, 0, 0, video.width, video.height);
 
          if (body) {
-            // draw circle for left and right wrist
-            const leftWrist = body.getBodyPart(bodyParts.leftWrist)
-            const rightWrist = body.getBodyPart(bodyParts.rightWrist)
+            // draw circle for each bodyPart
+            const confidenceTreshhold = 0.75
+            let yOffset = 20
+            let xOffset = 10
+            let numOfTexts = 0
+            Object.values(bodyParts).forEach(bodyPartName => {
+               if (bodyPartEnabled(bodyPartName)) {
 
-            // draw left wrist
-            ctx.beginPath()
-            ctx.arc(leftWrist.position.x, leftWrist.position.y, 10, 0, 2 * Math.PI)
-            ctx.fillStyle = 'white'
-            ctx.fill()
 
-            // draw right wrist
-            ctx.beginPath()
-            ctx.arc(rightWrist.position.x, rightWrist.position.y, 10, 0, 2 * Math.PI)
-            ctx.fillStyle = 'white'
-            ctx.fill()
+                  let bodyPart = body.getBodyPart(bodyPartName)
+                  let { x, y } = bodyPart.position
+                  let speed = bodyPart.speed.absoluteSpeed
+                  let confidenceScore = bodyPart.confidenceScore
+
+                  // draw body part
+                  ctx.beginPath()
+                  ctx.arc(x, y, 5, 0, 2 * Math.PI)
+                  ctx.fillStyle = `rgba(255, 255, 255, ${confidenceScore})`
+                  ctx.fill()
+                  ctx.fillStyle = `rgba(255, 165, 0, 1)`
+                  ctx.font = "14px 'Arial'"
+                  ctx.fillText(`${bodyPartName}`, xOffset, yOffset)
+                  ctx.fillText(`x: ${x}`, xOffset, 15 + yOffset)
+                  ctx.fillText(`y: ${y}`, xOffset, 30 + yOffset)
+                  ctx.fillText(`speed: ${speed}`, xOffset, 45 + yOffset)
+                  ctx.fillText(`confidence: ${confidenceScore}`, xOffset, 60 + yOffset)
+                  if (yOffset > inputResolution.height - 120) {
+                     yOffset = 20
+                     xOffset = 130
+                  }
+                  else {
+                     yOffset = yOffset + 80
+                  }
+
+               }
+            })
          }
          requestAnimationFrame(drawCameraIntoCanvas)
+
       }
-
-
       function serializeBodyPart(name, body) {
          let bodyPart = body.getBodyPart(name)
          return `${name},${bodyPart.position.x},${bodyPart.position.y},${bodyPart.speed.absoluteSpeed},${bodyPart.confidenceScore}\n`
@@ -87,8 +160,6 @@
 
       // listen for bodies detected and send them to microbit if connected
       bodyStream.addEventListener('bodiesDetected', async (e) => {
-
-
 
          body = e.detail.bodies.getBodyAt(0)
 
