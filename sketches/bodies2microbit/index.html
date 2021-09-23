@@ -74,11 +74,11 @@
          architecture: modelArchitecture.MobileNetV1,
          detectionType: detectionType.singleBody,
          videoElement: document.getElementById('video'),
-         samplingRate: 500
+         samplingRate: 250
       })
 
       // global
-      let body
+      let bodies
       let writer
       let port
       let count = 0
@@ -103,48 +103,50 @@
          // draw the video element into the canvas
          ctx.drawImage(video, 0, 0, video.width, video.height);
 
-         if (body) {
-            // draw circle for each bodyPart
-            const confidenceTreshhold = 0.75
-            let yOffset = 20
-            let xOffset = 10
-            let numOfTexts = 0
-            Object.values(bodyParts).forEach(bodyPartName => {
-               if (bodyPartEnabled(bodyPartName)) {
+         if (bodies) {
+            bodies.forEach(body => {
+               // draw circle for each bodyPart
+               const confidenceTreshhold = 0.75
+               let yOffset = 20
+               let xOffset = 10
+               let numOfTexts = 0
+               Object.values(bodyParts).forEach(bodyPartName => {
+                  if (bodyPartEnabled(bodyPartName)) {
 
 
-                  let bodyPart = body.getBodyPart(bodyPartName)
-                  let { x, y } = bodyPart.position
-                  let speed = bodyPart.speed.absoluteSpeed
-                  let confidenceScore = bodyPart.confidenceScore
+                     let bodyPart = body.getBodyPart(bodyPartName)
+                     let { x, y } = bodyPart.position
+                     let speed = bodyPart.speed.absoluteSpeed
+                     let confidenceScore = bodyPart.confidenceScore
 
-                  // draw body part
-                  ctx.beginPath()
-                  ctx.arc(x, y, 5, 0, 2 * Math.PI)
-                  ctx.fillStyle = `rgba(255, 255, 255, ${confidenceScore})`
-                  ctx.fill()
-                  ctx.fillStyle = `rgba(255, 165, 0, 1)`
-                  ctx.font = "14px 'Arial'"
-                  ctx.fillText(`${bodyPartName}`, xOffset, yOffset)
-                  ctx.fillText(`x: ${x}`, xOffset, 15 + yOffset)
-                  ctx.fillText(`y: ${y}`, xOffset, 30 + yOffset)
-                  ctx.fillText(`speed: ${speed}`, xOffset, 45 + yOffset)
-                  ctx.fillText(`confidence: ${confidenceScore}`, xOffset, 60 + yOffset)
-                  if (yOffset > inputResolution.height - 120) {
-                     yOffset = 20
-                     xOffset = 130
+                     // draw body part
+                     ctx.beginPath()
+                     ctx.arc(x, y, 5, 0, 2 * Math.PI)
+                     ctx.fillStyle = `rgba(255, 255, 255, ${confidenceScore})`
+                     ctx.fill()
+                     ctx.fillStyle = `rgba(255, 255, 153, 1)`
+                     ctx.font = "12px 'Arial'"
+                     ctx.fillText(`${bodyPartName}`, xOffset, yOffset)
+                     ctx.fillText(`x: ${x}`, xOffset, 15 + yOffset)
+                     ctx.fillText(`y: ${y}`, xOffset, 30 + yOffset)
+                     ctx.fillText(`speed: ${speed}`, xOffset, 45 + yOffset)
+                     ctx.fillText(`confidence: ${confidenceScore}`, xOffset, 60 + yOffset)
+                     if (yOffset > inputResolution.height - 120) {
+                        yOffset = 20
+                        xOffset = 130
+                     }
+                     else {
+                        yOffset = yOffset + 80
+                     }
+
                   }
-                  else {
-                     yOffset = yOffset + 80
-                  }
-
-               }
+               })
             })
          }
          requestAnimationFrame(drawCameraIntoCanvas)
 
       }
-      function serializeBodyPart(name, body) {
+      function serializeBodyPart(name, body, index) {
          let bodyPart = body.getBodyPart(name)
          return `${name},${bodyPart.position.x},${bodyPart.position.y},${bodyPart.speed.absoluteSpeed},${bodyPart.confidenceScore}\n`
       }
@@ -158,16 +160,20 @@
          }
       }
 
-      // listen for bodies detected and send them to microbit if connected
+      // listen for bodies detected and send checked bodyparts to microbit if it is connected
       bodyStream.addEventListener('bodiesDetected', async (e) => {
+         // set bodies variable
+         bodies = e.detail.bodies.getBodies()
+         if (bodies.length > 0) {
+            const body = bodies[0]
 
-         body = e.detail.bodies.getBodyAt(0)
-
-         writeAndLog(serializeBodyPart(bodyParts.nose, body))
-         writeAndLog(serializeBodyPart(bodyParts.leftEye, body))
-         writeAndLog(serializeBodyPart(bodyParts.rightEye, body))
-         //     writeAndLog(serializeBodyPart(bodyParts.leftShoulder, body))
-         //      writeAndLog(serializeBodyPart(bodyParts.rightShoulder, body))
+            bodies.forEach(body => {
+               Object.values(bodyParts).forEach((bodyPartName, index) => {
+                  if (bodyPartEnabled(bodyPartName))
+                     writeAndLog(serializeBodyPart(bodyPartName, body, index))
+               })
+            })
+         }
 
       })
 
