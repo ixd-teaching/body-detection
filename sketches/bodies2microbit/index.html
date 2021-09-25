@@ -67,12 +67,13 @@
    </div>
 
    <script>
+    
 
       // ---- setup and run body detection ----------------------------------------------------
       const bodyStream = new BodyStream({
          posenet: posenet,
          architecture: modelArchitecture.MobileNetV1,
-         detectionType: detectionType.singleBody,
+         detectionType: detectionType.multipleBodies,
          videoElement: document.getElementById('video'),
          samplingRate: 250
       })
@@ -146,11 +147,10 @@
          requestAnimationFrame(drawCameraIntoCanvas)
 
       }
-      function serializeBodyPart(name, body, index) {
+      function serializeBodyPart(name, body, bodyIndex, bodyPartIndex) {
          let bodyPart = body.getBodyPart(name)
-         return `${name},${bodyPart.position.x},${bodyPart.position.y},${bodyPart.speed.absoluteSpeed},${bodyPart.confidenceScore}\n`
+         return `${bodyIndex},${bodyPartIndex},${bodyPart.position.x},${bodyPart.position.y},${bodyPart.speed.absoluteSpeed},${bodyPart.confidenceScore}\n`
       }
-
 
 
       async function writeAndLog(s) {
@@ -167,10 +167,10 @@
          if (bodies.length > 0) {
             const body = bodies[0]
 
-            bodies.forEach(body => {
-               Object.values(bodyParts).forEach((bodyPartName, index) => {
+            bodies.forEach((body, bodyIndex) => {
+               Object.values(bodyParts).forEach((bodyPartName, bodyPartIndex) => {
                   if (bodyPartEnabled(bodyPartName))
-                     writeAndLog(serializeBodyPart(bodyPartName, body, index))
+                     writeAndLog(serializeBodyPart(bodyPartName, body, bodyIndex, bodyPartIndex))
                })
             })
          }
