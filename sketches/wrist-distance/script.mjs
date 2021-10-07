@@ -1,12 +1,12 @@
 import { detectBodies, bodyParts2D, bodyParts3D } from "../../lib/bodydetection.mjs"
-import { drawImageWithOverlay, drawSolidCircle } from "../utils/drawing.mjs"
-import { continuosly } from "../../utils/system.mjs"
-import { createCameraFeed } from "../utils/video.mjs"
+import { drawImageWithOverlay, drawSolidCircle } from "../../lib/drawing.mjs"
+import { continuosly } from "../../lib/system.mjs"
+import { createCameraFeed } from "../../lib/video.mjs"
 
 function outputDistance(output, body) {
     if (body) {
         const distance = body.getDistanceBetweenBodyParts3D(bodyParts3D.leftWrist, bodyParts3D.rightWrist)
-        output.innerText = `Distance between wrists: ${distance}`
+        output.innerText = `Distance between wrists: ${distance.toFixed(2)}`
     }
 }
 

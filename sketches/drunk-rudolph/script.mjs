@@ -1,8 +1,8 @@
 
 import { detectBodies, bodyParts2D, bodyParts3D } from '../../lib/bodydetection.mjs'
-import { drawImageWithOverlay, drawSolidCircle, drawStar } from '../utils/drawing.mjs'
+import { drawImageWithOverlay, drawSolidCircle, drawStar } from '../../lib/drawing.mjs'
 import { continuosly } from '../../lib/system.mjs'
-import { createCameraFeed } from '../utils/video.mjs'
+import { createCameraFeed } from '../../lib/video.mjs'
 
 function outputNoseSpeed(output, body) {
   if (body) {
@@ -35,7 +35,8 @@ async function run(canvas, output) {
   const config = {
     video: video,
     maxPoses: 1,
-    sampleRate: 100
+    sampleRate: 100,
+    flipHorizontal: false
   }
   // start listening to bodies in camera-feed
   detectBodies(config, (e) => {
