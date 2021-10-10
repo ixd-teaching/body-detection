@@ -24,12 +24,17 @@ async function run(senderId, sendBtn, status) {
     multiPose: false,
     sampleRate: 100
   }
-  
+
   // send detected body to any listening clients and log to console
   detectBodies(config, (e) => {
     status.innerHTML = 'Sending data...'
     remote.send(e.detail.bodies)
-    logBodies(e.detail.bodies)
+    logBodies(e.detail.bodies, (bodyObject) => {
+      console.log(`Body index: ${bodyObject.bodyIndex}`)
+      bodyObject.bodyPartsData.bodyParts2D.forEach(bodyPart => {
+        console.log(`${bodyPart.name} (2D), ${bodyPart.position.x}, ${bodyPart.position.y}, ${bodyPart.speed.absoluteSpeed}, ${bodyPart.confidenceScore}`)
+      })
+    })
   })
 }
 

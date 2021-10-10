@@ -10,7 +10,8 @@
     const sendBtn = document.getElementById('sendBtn')
     const senderID = document.getElementById('senderID')
     const status = document.getElementById('status')
-    sendBtn.onclick = () => run(senderID, sendBtn, status)
+    const log = document.getElementById('log')
+    sendBtn.onclick = () => run(senderID, sendBtn, status, log)
     sendBtn.disabled = false
 </script>
 
@@ -19,6 +20,7 @@
     <input type="text" id="senderID" name="senderID" value="1">
     <button id="sendBtn" style="height: 21px;width:50px" disabled>Start</button>
     <div id="status"></div>
+    <div id="log"></div>
 </body>
 
 </html>
