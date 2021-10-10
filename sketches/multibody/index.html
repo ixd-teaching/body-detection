@@ -1,0 +1,62 @@
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Multiple bodies</title>
+</head>
+<style>
+  .wrapper {
+    display: grid;
+    grid-template-columns: 150px 150px 150px 150px;
+    grid-template-rows: auto auto auto;
+  }
+</style>
+
+<script type="module">
+  import { run } from './script.mjs'
+  run(document.getElementById("canvas"))
+</script>
+
+<body>
+  <canvas id="canvas" width="640" height="480"></canvas>
+    <div class="wrapper" style="display: grid" width="640" style="background-color: red">
+      <div class="bodyPartCheck"><input type="checkbox" name="bodyPart" id="nose" checked><label for="nose">Nose</label>
+      </div>
+      <div class="bodyPartCheck"><input type="checkbox" name="bodyPart" id="left_eye"><label for="left_eye">Left
+          eye</label></div>
+      <div class="bodyPartCheck"><input type="checkbox" name="bodyPart" id="right_eye"><label for="right_eye">Right
+          eye</label></div>
+      <div class="bodyPartCheck"><input type="checkbox" name="bodyPart" id="left_ear"><label for="left_ear">Left
+          ear</label></div>
+      <div class="bodyPartCheck"><input type="checkbox" name="bodyPart" id="right_ear"><label for="right_ear">Right
+          ear</label></div>
+      <div class="bodyPartCheck"><input type="checkbox" name="bodyPart" id="left_shoulder"><label
+          for="left_shoulder">Left
+          shoulder</label></div>
+      <div class="bodyPartCheck"><input type="checkbox" name="bodyPart" id="right_shoulder"><label
+          for="right_shoulder">Right shoulder</label></div>
+      <div class="bodyPartCheck"><input type="checkbox" name="bodyPart" id="left_elbow"><label for="left_elbow">Left
+          elbow</label></div>
+      <div class="bodyPartCheck"><input type="checkbox" name="bodyPart" id="right_elbow"><label for="right_elbow">Right
+          elbow</label></div>
+      <div class="bodyPartCheck"><input type="checkbox" name="bodyPart" id="left_wrist"><label for="left_wrist">Left
+          wrist</label></div>
+      <div class="bodyPartCheck"><input type="checkbox" name="bodyPart" id="right_wrist"><label for="right_wrist">Right
+          wrist</label></div>
+      <div class="bodyPartCheck"><input type="checkbox" name="bodyPart" id="left_hip"><label for="left_hip">Left
+          hip</label></div>
+      <div class="bodyPartCheck"><input type="checkbox" name="bodyPart" id="right_hip"><label for="right_hip">Right
+          hip</label></div>
+      <div class="bodyPartCheck"><input type="checkbox" name="bodyPart" id="left_knee"><label for="left_knee">Left
+          knee</label></div>
+      <div class="bodyPartCheck"><input type="checkbox" name="bodyPart" id="right_knee"><label for="right_knee">Right
+          knee</label></div>
+      <div class="bodyPartCheck"><input type="checkbox" name="bodyPart" id="left_ankle"><label for="left_ankle">Left
+          ankle</label></div>
+      <div class="bodyPartCheck"><input type="checkbox" name="bodyPart" id="right_ankle"><label for="right_ankle">Right
+          ankle</label></div>
+    </div>
+  </div>
+</body>
+
+</html>

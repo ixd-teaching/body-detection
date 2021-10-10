@@ -1,0 +1,24 @@
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Send body data to any </title>
+</head>
+
+<script type="module">
+    import { run } from './script.mjs'
+    const sendBtn = document.getElementById('sendBtn')
+    const senderID = document.getElementById('senderID')
+    const status = document.getElementById('status')
+    sendBtn.onclick = () => run(senderID, sendBtn, status)
+    sendBtn.disabled = false
+</script>
+
+<body>
+    <label for="senderID">Sender ID:</label>
+    <input type="text" id="senderID" name="senderID" value="1">
+    <button id="sendBtn" style="height: 21px;width:50px" disabled>Start</button>
+    <div id="status"></div>
+</body>
+
+</html>
