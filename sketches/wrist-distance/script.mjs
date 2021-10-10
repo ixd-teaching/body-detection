@@ -1,7 +1,7 @@
 import { detectBodies, bodyParts2D, bodyParts3D } from "../../lib/bodydetection.mjs"
 import { drawImageWithOverlay, drawSolidCircle } from "../../lib/drawing.mjs"
 import { continuosly } from "../../lib/system.mjs"
-import { createCameraFeed } from "../../lib/video.mjs"
+import { createCameraFeed, facingMode } from "../../lib/camera.mjs"
 
 function outputDistance(output, body) {
     if (body) {
@@ -26,13 +26,14 @@ function drawWrists(canvas, body) {
 
 async function run(canvas, output) {
     let latestBody
+    const multiBodies = false
 
     // create a video element connected to the camera 
-    const video = await createCameraFeed(canvas.width, canvas.height, 'environment')
+    const video = await createCameraFeed(canvas.width, canvas.height, facingMode.environment)
 
     const config = {
         video: video,
-        maxPoses: 1,
+        multiPose: multiBodies,
         sampleRate: 100
     }
     // start listening to bodies in camera-feed
