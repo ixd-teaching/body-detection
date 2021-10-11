@@ -31,7 +31,7 @@ function run(status) {
 
 
     console.log(`Body id: ${body.id}`)
-    body.bodyParts2D.forEach(bodyPart => {
+    body.bodyParts3D.forEach(bodyPart => {
         console.log(`${bodyPart.name}, ${bodyPart.position.x}, ${bodyPart.position.y}, ${bodyPart.speed.absoluteSpeed}, ${bodyPart.confidenceScore}`)
       })
   }

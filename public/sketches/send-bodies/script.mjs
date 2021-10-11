@@ -33,8 +33,8 @@ async function run(status) {
       remote.send(bodyObject)
    
       // log data to console
-      console.log(`Body id: ${bodyObject.bodyId}`)
-      bodyObject.bodyParts2D.forEach(bodyPart => {
+      console.log(`Body id: ${bodyObject.id}`)
+      bodyObject.bodyParts3D.forEach(bodyPart => {
         console.log(`${bodyPart.name}, ${bodyPart.position.x}, ${bodyPart.position.y}, ${bodyPart.speed.absoluteSpeed}, ${bodyPart.confidenceScore}`)
       })
     }
