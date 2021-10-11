@@ -26,7 +26,7 @@ function run(status) {
     if (bodies.listOfBodies.length === 1)
       status.innerHTML = 'Receiving data from 1 body...'
     else
-      status.innerHTML = `Receiving data from ${bodies.length} bodies...`
+      status.innerHTML = `Receiving data from ${bodies.listOfBodies.length} bodies...`
 
 
 
