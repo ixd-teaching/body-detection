@@ -2,24 +2,29 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Send body data to any </title>
+    <title>Send body data to any listening client</title>
 </head>
 
 <script type="module">
     import { run } from './script.mjs'
-    const sendBtn = document.getElementById('sendBtn')
-    const senderID = document.getElementById('senderID')
-    const status = document.getElementById('status')
-    const log = document.getElementById('log')
-    sendBtn.onclick = () => run(senderID, sendBtn, status, log)
-    sendBtn.disabled = false
+    run(document.getElementById('status'))
 </script>
 
+<style>
+    #status {
+        font-weight: bold;
+        font-family: Helvetica, Arial, sans-serif
+    }
+
+    #log {
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 12;
+    }
+</style>
+
 <body>
-    <label for="senderID">Sender ID:</label>
-    <input type="text" id="senderID" name="senderID" value="1">
-    <button id="sendBtn" style="height: 21px;width:50px" disabled>Start</button>
     <div id="status"></div>
+    <p></p>
     <div id="log"></div>
 </body>
 

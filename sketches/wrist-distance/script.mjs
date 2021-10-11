@@ -1,20 +1,20 @@
-import { detectBodies, bodyParts2D, bodyParts3D } from "../../lib/bodydetection.mjs"
+import { detectBodies, bodyPartsList } from "../../lib/bodydetection.mjs"
 import { drawImageWithOverlay, drawSolidCircle } from "../../lib/drawing.mjs"
 import { continuosly } from "../../lib/system.mjs"
 import { createCameraFeed, facingMode } from "../../lib/camera.mjs"
 
-function outputDistance(output, body) {
+function outputDistance(status, body) {
     if (body) {
-        const distance = body.getDistanceBetweenBodyParts3D(bodyParts3D.leftWrist, bodyParts3D.rightWrist)
-        output.innerText = `Distance between wrists: ${distance.toFixed(2)}`
+        const distance = body.getDistanceBetweenBodyParts3D(bodyPartsList.leftWrist, bodyPartsList.rightWrist)
+        status.innerText = `Distance between wrists: ${distance.toFixed(2)} m`
     }
 }
 
 function drawWrists(canvas, body) {
     if (body) {
         // draw circle for left and right wrist
-        const leftWrist = body.getBodyPart2D(bodyParts2D.leftWrist)
-        const rightWrist = body.getBodyPart2D(bodyParts2D.rightWrist)
+        const leftWrist = body.getBodyPart2D(bodyPartsList.leftWrist)
+        const rightWrist = body.getBodyPart2D(bodyPartsList.rightWrist)
 
         // draw left wrist
         drawSolidCircle(canvas, leftWrist.position.x, leftWrist.position.y, 10, 'white')
@@ -24,28 +24,27 @@ function drawWrists(canvas, body) {
     }
 }
 
-async function run(canvas, output) {
+async function run(canvas, status) {
     let latestBody
-    const multiBodies = false
 
-    // create a video element connected to the camera 
+    // create a video element connected to the camera
     const video = await createCameraFeed(canvas.width, canvas.height, facingMode.environment)
 
     const config = {
         video: video,
-        multiPose: multiBodies,
-        sampleRate: 100
+        multiPose: false,
+        sampleRate: 100,
+        flipHorizontal: true // true if webcam
+
     }
-    // start listening to bodies in camera-feed
-    detectBodies(config, (e) => latestBody = e.detail.bodies[0])
+    // start detecting bodies camera-feed a set latestBody to first (and only) body
+    detectBodies(config, (e) => latestBody = e.detail.bodies.listOfBodies[0])
 
     // draw video with wrists overlaid onto canvas continuously
     continuosly(() => {
         drawImageWithOverlay(canvas, video, () => drawWrists(canvas, latestBody))
-        outputDistance(output, latestBody)
-    }
-
-    )
+        outputDistance(status, latestBody)
+    })
 }
 
 export { run }

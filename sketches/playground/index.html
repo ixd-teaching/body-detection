@@ -14,11 +14,12 @@
 
 <script type="module">
   import { run } from './script.mjs'
-  run(document.getElementById("canvas"))
+  run(document.getElementById("canvas"), document.getElementById("status"))
 </script>
 
 <body>
   <canvas id="canvas" width="640" height="480"></canvas>
+    <div id="status"></div>
     <div class="wrapper" style="display: grid" width="640" style="background-color: red">
       <div class="bodyPartCheck"><input type="checkbox" name="bodyPart" id="nose" checked><label for="nose">Nose</label>
       </div>
