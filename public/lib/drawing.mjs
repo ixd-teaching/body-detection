@@ -53,7 +53,7 @@ function drawBodyParts(canvas, bodies, enabledBodyPartNames, has3DData) {
    let yOffset = 20
    let xOffset = 10
 
-   function printData(bodyPartName) {
+   function printData(body, bodyPartName) {
       let x, y, z, speed, confidenceScore, decimals
       if (has3DData) {
          const bodyPart3D = body.getBodyPart3D(bodyPartName)
@@ -93,7 +93,7 @@ function drawBodyParts(canvas, bodies, enabledBodyPartNames, has3DData) {
          enabledBodyPartNames.forEach(bodyPartName => {
             bodyPart2D = body.getBodyPart2D(bodyPartName)
             drawSolidCircle(canvas, bodyPart2D.position.x, bodyPart2D.position.y, 10, 'white', 1)
-            printData(bodyPartName)
+            printData(body, bodyPartName)
          })
       })
    }

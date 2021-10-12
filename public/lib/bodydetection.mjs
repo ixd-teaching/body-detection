@@ -105,6 +105,7 @@ class Body {
         return result
     }
 
+
     getBodyPart2D(name) {
         return this.#getBodyPart(name, this.bodyParts2D)
     }

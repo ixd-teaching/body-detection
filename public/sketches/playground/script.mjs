@@ -37,7 +37,7 @@ async function run(canvas, status) {
     return result
   }
   // draw video with overlay onto canvas continuously 
-  continuosly(() => drawImageWithOverlay(canvas, video, () => drawBodyParts(canvas, bodies, enabledBodyParts())))
+  continuosly(() => drawImageWithOverlay(canvas, video, () => drawBodyParts(canvas, bodies, enabledBodyParts(), !config.multiPose)))
 }
 
 export { run }
