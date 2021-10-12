@@ -4,7 +4,7 @@ import { PoseDectorFromVideo } from '../../lib/posedetection.mjs'
 
 const bodyPartsList = {
     nose: "nose", leftEye: "left_eye", leftEyeInner: "left_eye_inner", leftEyeOuter: "left_eye_outer", rightEyeInner: "right_eye_inner",
-    rightEye: "right_eye", rightEyeOuter: "right_eye_outer", leftEar: "left_ear", rightEar: "left_ear",
+    rightEye: "right_eye", rightEyeOuter: "right_eye_outer", leftEar: "left_ear", rightEar: "right_ear",
     mouthLeft: "mouth_left", mouthRight: "mouth_right", leftShoulder: "left_shoulder", rightShoulder: "right_shoulder",
     leftElbow: "left_elbow", rightElbow: "right_elbow", leftWrist: "left_wrist", rightWrist: "right_wrist",
     leftPinky: "left_pinky", rightPinky: "right_pinky", leftIndex: "left_index", rightIndex: "right_index",
@@ -51,7 +51,7 @@ class BodyPart3D {
     }
 }
 
-function getDistanceBetweenBodyParts2D (bodyPart1, bodyPart2) {
+function getDistanceBetweenBodyParts2D(bodyPart1, bodyPart2) {
     if (bodyPart1 !== null && bodyPart1 !== undefined && bodyPart2 !== null && bodyPart2 !== undefined) {
         const distanceX = bodyPart1.position.x - bodyPart2.position.x
         const distanceY = bodyPart1.position.y - bodyPart2.position.y
@@ -128,8 +128,8 @@ class Body {
 function createBodyFromObject(bodyObject) {
     return new Body(
         bodyObject.id,
-        bodyObject.bodyParts2D.map(bp => new BodyPart2D({name: bp.name, position: bp.position, speed: bp.speed, confidenceScore: bp.confidenceScore})),
-        bodyObject ? bodyObject.bodyParts3D.map(bp => new BodyPart3D({name: bp.name, position: bp.position, speed: bp.speed, confidenceScore: bp.confidenceScore})) : null
+        bodyObject.bodyParts2D.map(bp => new BodyPart2D({ name: bp.name, position: bp.position, speed: bp.speed, confidenceScore: bp.confidenceScore })),
+        bodyObject ? bodyObject.bodyParts3D.map(bp => new BodyPart3D({ name: bp.name, position: bp.position, speed: bp.speed, confidenceScore: bp.confidenceScore })) : null
     )
 }
 
@@ -191,7 +191,7 @@ function constructBody(id, prevPose, currPose, timeLapsed) {
 class Bodies {
     listOfBodies
 
-    constructor (bodies) {
+    constructor(bodies) {
         this.listOfBodies = bodies
     }
 
@@ -274,11 +274,11 @@ function* bodiesToObjectsGenerator(bodies) {
 }
 
 export {
-    detectBodies, 
-    Body, 
-    Bodies, 
-    bodyPartsList, 
-    bodyPartNames, 
-    createBodyFromObject, 
+    detectBodies,
+    Body,
+    Bodies,
+    bodyPartsList,
+    bodyPartNames,
+    createBodyFromObject,
     bodiesToObjectsGenerator
 }
