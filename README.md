@@ -123,8 +123,6 @@ const bodyPartsList = {
     leftFootIndex: "left_foot_index", 
     rightFootIndex: "right_foot_index"
 }
-~~~
-*
 
 ### Resources
 For a brief introduction to the BlazePose framework see: 
