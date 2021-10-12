@@ -1,10 +1,10 @@
 ## Send body data to any remote listeners 
 
 ### Description
-This sketch demonstrates how to send body data to any remote listeners using Clint's remote class to send data.
+This sketch demonstrates how to send body data to any remote listeners using Clint's remote class.
 
 ### Usage 
-As ususal we get a camera feed, configure the framework and get the body data in the event handler handed detectBodies. To able to send data over the wire they need to be translated into an object. We do that by getting a 'generator' that can be iterate over in a 'for loop'. In the loop each body is send. The Remote class will automatically add 'from' field to the object before it is send that identifies the sender uniquely. See the 'receive-bodies' sketch on how that is used to identify bodies send from more than one device or browser tab. Finally we log the data send to the console, which (by a bit of magic) will be shown in the 'log' div on the page. 
+As ususal we get a camera feed, configure the framework and get the body data in the event handler handed 'detectBodies'. To able to send data over the wire they need to be translated into a plain javascript object. We do that by getting a 'generator' that can be iterate over in a 'for loop'. In the loop each body is sent. The Remote class will automatically add 'from' field to the object before it is senr that identifies the sender uniquely. See the 'receive-bodies' sketch on how that is used to identify bodies sent from more than one device or browser tab. Finally we log the data sent to the console, which (by a bit of magic) will be shown in the 'log' div on the page. 
 
 ~~~javascript
   const config = {

@@ -45,7 +45,7 @@ BodyPart contain all 2D data and methods with regard to a single bodypart (e.g. 
 BodyPart contain all 3D data and methods with regard to a single bodypart (e.g. left knee), which is position, speed and confidence score.
 
 *Object bodyPartsList:*
-The object bodyPartsList enumerates all body parts. When body parts are referenced we should use the names in bodyPartsList, e.g. 'bodyParts.leftEar'.
+The object bodyPartsList enumerates all body parts. When body parts are referenced we should use the names in bodyPartsList, e.g. 'bodyPartsList.leftEar'.
 
 ### Usage
 Below is mimimal example of how to create a camera feed, configure and run body detection. This has set multiPose to false, i.e. it can only detects one body (pose) in a video frame. In addition to a configuration object, the detectBodies takes a function that is called when bodies are detected. In this example, we just save the latest body data in the variable 'latestBody' (we get an array of 'bodies', but since we have set multiPose = false, will there only be one body and just take the first element in the array). So the list of bodies is accessible from e.detail.bodies and is of class 'Bodies' and the listOfBodies returns an array of objects of the Body class. 

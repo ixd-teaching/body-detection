@@ -27,9 +27,11 @@ function drawWrists(canvas, body) {
 async function run(canvas, status) {
     let latestBody
 
+    status.innerText = 'Setting up camera feed...'
     // create a video element connected to the camera
     const video = await createCameraFeed(canvas.width, canvas.height, facingMode.environment)
 
+    status.innerText = 'Loading model...'
     const config = {
         video: video,
         multiPose: false,

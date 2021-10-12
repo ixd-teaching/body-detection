@@ -1,7 +1,7 @@
 ## Speed of nose
 
 ### Description
-This sketch demonstrates how to get the speed of a body part in this case 'nose'
+This sketch demonstrates how to get the speed of a body part in this case 'nose'.
 
 ### Usage 
 As ususal we get a camera feed, configure the framework and get the body data from the event handler handed 'detectBodies' and store the latest body in 'latestBody'.

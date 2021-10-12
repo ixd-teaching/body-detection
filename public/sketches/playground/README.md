@@ -1,10 +1,10 @@
 ## Playground
 
 ### Description
-The playground helps you see what the framework detects. You can toggle which body parts should be tracked
+The playground helps you see what the framework detects. You can toggle which body parts should be tracked.
 
 ### Usage 
-As ususal we get a camera feed, configure the framework and get the body data from the event handler handed 'detectBodies' and  store the result in the variable 'bodies' to be able to access the data subsequently.  
+As ususal we get a camera feed, configure the framework and get the body data from the event handler handed to 'detectBodies' and  store the result in the variable 'bodies' to be able to access the data subsequently.  
 
 ~~~javascript
 const video = await createCameraFeed(canvas.width, canvas.height, facingMode.environment)
