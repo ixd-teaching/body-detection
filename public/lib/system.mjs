@@ -4,5 +4,4 @@ function continuosly(fun) {
    requestAnimationFrame(() => continuosly(fun))
 }
 
-
 export { continuosly }

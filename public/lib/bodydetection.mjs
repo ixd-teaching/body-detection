@@ -2,13 +2,6 @@ import { pipe, fromEvent } from 'https://cdn.skypack.dev/rxjs'
 import { map, pairwise } from 'https://cdn.skypack.dev/rxjs/operators'
 import { PoseDectorFromVideo } from '../../lib/posedetection.mjs'
 
-/* const bodyParts2D = {
-    nose: "nose", leftEye: "left_eye", rightEye: "right_eye", leftEar: "left_ear", rightEar: "right_ear",
-    leftShoulder: "left_shoulder", rightShoulder: "right_shoulder", leftElbow: "left_elbow", rightElbow: "right_elbow",
-    leftWrist: "left_wrist", rightWrist: "right_wrist", leftHip: "left_hip", rightHip: "right_hip", leftKnee: "left_knee",
-    rightKnee: "right_knee", leftAnkle: "left_ankle", rightAnkle: "right_ankle"
-} */
-
 const bodyPartsList = {
     nose: "nose", leftEye: "left_eye", leftEyeInner: "left_eye_inner", leftEyeOuter: "left_eye_outer", rightEyeInner: "right_eye_inner",
     rightEye: "right_eye", rightEyeOuter: "right_eye_outer", leftEar: "left_ear", rightEar: "left_ear",
@@ -279,7 +272,6 @@ function* bodiesToObjectsGenerator(bodies) {
     for (const body of bodies)
         yield body.toObject()
 }
-
 
 export {
     detectBodies, 

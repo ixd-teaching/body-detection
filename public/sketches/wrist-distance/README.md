@@ -20,7 +20,7 @@ const video = await createCameraFeed(canvas.width, canvas.height, facingMode.env
       flipHorizontal: true // true if webcam
 
   }
-  // start detecting bodies camera-feed a set latestBody to first (and only) body
+  // start detecting bodies from camera-feed a set latestBody to first (and only) body
   detectBodies(config, (e) => latestBody = e.detail.bodies.listOfBodies[0])
 ~~~
 
