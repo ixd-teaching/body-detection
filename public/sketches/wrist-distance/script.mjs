@@ -38,7 +38,10 @@ async function run(canvas, status) {
 
     }
     // start detecting bodies camera-feed a set latestBody to first (and only) body
-    detectBodies(config, (e) => latestBody = e.detail.bodies.listOfBodies[0])
+    detectBodies(config, function (e) 
+    { 
+        latestBody = e.detail.bodies.listOfBodies[0] 
+    })
 
     // draw video with wrists overlaid onto canvas continuously
     continuosly(() => {

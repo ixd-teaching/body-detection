@@ -1,3 +1,4 @@
+
 import { bodyPartNames } from '../../lib/bodydetection.mjs'
 import { detectBodies } from '../../lib/bodydetection.mjs'
 import { drawImageWithOverlay, drawBodyParts} from '../../lib/drawing.mjs'
@@ -36,7 +37,7 @@ async function run(canvas, status) {
     return result
   }
   // draw video with overlay onto canvas continuously 
-  continuosly(() => drawImageWithOverlay(canvas, video, () => drawBodyParts(canvas, bodies, enabledBodyParts())))
+  continuosly(() => drawImageWithOverlay(canvas, video, () => drawBodyParts(canvas, bodies, enabledBodyParts(), !config.multiPose)))
 }
 
 export { run }
