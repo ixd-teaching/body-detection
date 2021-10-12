@@ -57,7 +57,8 @@ Below is mimimal example of how to create a camera feed, configure and run body 
     let latestBody
 
    // create a video element connected to the camera
-    const video = await createCameraFeed(canvas.width, canvas.height, facingMode.environment)
+   // facingMode can be 'environment' (camera towards the environment) or 'user' (camera towards the user)
+    const video = await createCameraFeed(640, 480, facingMode.environment)
 
     const config = {
         video: video,

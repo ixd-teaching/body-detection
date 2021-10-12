@@ -36,7 +36,7 @@ async function run(canvas, status) {
     }, [])
     return result
   }
-  // draw video with nose and eyes overlaid onto canvas continuously 
+  // draw video with overlay onto canvas continuously 
   continuosly(() => drawImageWithOverlay(canvas, video, () => drawBodyParts(canvas, bodies, enabledBodyParts())))
 }
 

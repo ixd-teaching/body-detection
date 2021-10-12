@@ -28,8 +28,6 @@ function run(status) {
     else
       status.innerHTML = `Receiving data from ${bodies.listOfBodies.length} bodies...`
 
-
-
     console.log(`Body id: ${body.id}`)
     body.bodyParts3D.forEach(bodyPart => {
         console.log(`${bodyPart.name}, ${bodyPart.position.x}, ${bodyPart.position.y}, ${bodyPart.speed.absoluteSpeed}, ${bodyPart.confidenceScore}`)
