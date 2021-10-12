@@ -1,4 +1,3 @@
-
 import { bodyPartNames } from '../../lib/bodydetection.mjs'
 import { detectBodies } from '../../lib/bodydetection.mjs'
 import { drawImageWithOverlay, drawBodyParts} from '../../lib/drawing.mjs'
