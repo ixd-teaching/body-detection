@@ -1,6 +1,6 @@
 import { pipe, fromEvent } from 'https://cdn.skypack.dev/rxjs'
 import { map, pairwise } from 'https://cdn.skypack.dev/rxjs/operators'
-import { PoseDectorFromVideo } from '../../lib/posedetection.mjs'
+import { PoseDectorFromVideo } from '/lib/posedetection.mjs'
 
 /* const bodyParts2D = {
     nose: "nose", leftEye: "left_eye", rightEye: "right_eye", leftEar: "left_ear", rightEar: "right_ear",
