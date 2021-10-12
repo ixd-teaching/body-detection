@@ -1,5 +1,5 @@
 
-const facingMode = {user: 'user', environment: 'enviroment'}
+const facingMode = {user: 'user', environment: 'environment'}
 
 async function createCameraFeed(width, height, facingMode) {
 
