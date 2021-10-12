@@ -11,7 +11,7 @@ import { PoseDectorFromVideo } from '../../lib/posedetection.mjs'
 
 const bodyPartsList = {
     nose: "nose", leftEye: "left_eye", leftEyeInner: "left_eye_inner", leftEyeOuter: "left_eye_outer", rightEyeInner: "right_eye_inner",
-    rightEye: "right_eye", rightEyeOuter: "right_eye_outer", leftEar: "left_ear", rightEar: "left_ear",
+    rightEye: "right_eye", rightEyeOuter: "right_eye_outer", leftEar: "left_ear", rightEar: "right_ear",
     mouthLeft: "mouth_left", mouthRight: "mouth_right", leftShoulder: "left_shoulder", rightShoulder: "right_shoulder",
     leftElbow: "left_elbow", rightElbow: "right_elbow", leftWrist: "left_wrist", rightWrist: "right_wrist",
     leftPinky: "left_pinky", rightPinky: "right_pinky", leftIndex: "left_index", rightIndex: "right_index",
