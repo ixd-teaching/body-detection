@@ -4,6 +4,8 @@ import { detectBodies } from '../../lib/bodydetection.mjs'
 import { drawImageWithOverlay, drawBodyParts} from '../../lib/drawing.mjs'
 import { continuosly } from '../../lib/system.mjs'
 import { createCameraFeed, facingMode } from '../../lib/camera.mjs'
+import { bodyPartsList } from '../../lib/bodydetection.mjs'
+import { Body } from '../../lib/bodydetection.mjs'
 
 
 async function run(canvas, status) {
