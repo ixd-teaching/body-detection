@@ -1,0 +1,17 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Wrist distance</title>
+</head>
+
+<body>
+  <canvas id="canvas" width="800" height="600"></canvas>
+  <div id="status"></div>
+</body>
+
+<script type="module">
+  import { run } from "./script.mjs"
+  run(document.getElementById("canvas"), document.getElementById("status"))
+</script>
+
+</html>
