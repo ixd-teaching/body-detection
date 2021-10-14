@@ -2,35 +2,38 @@ import { detectBodies, bodyPartsList } from "../../lib/bodydetection.mjs"
 import { drawImageWithOverlay, drawSolidCircle } from "../../lib/drawing.mjs"
 import { continuosly } from "../../lib/system.mjs"
 import { createCameraFeed, facingMode } from "../../lib/camera.mjs"
+import { clamp } from "../../lib/util.mjs"
+
+let wristDistance = 0;
 
 
+//calculates the distance between two bodyparts
 function outputDistance(status, body) {
     if (body) {
-        const distance = body.getDistanceBetweenBodyParts3D(bodyPartsList.leftWrist, bodyPartsList.rightWrist)
+        const distance = body.getDistanceBetweenBodyParts3D(bodyPartsList.nose, bodyPartsList.rightElbow)
         status.innerText = `Distance between wrists: ${distance.toFixed(2)} m`
+        wristDistance = distance.toFixed(2)
     }
 }
 
-function changeColor(outputDistance) {
-    if (distance <= 0.5){
-        document.body.style.backgroundColor = "red";
-    } else {
-        document.body.style.backgroundColor = "white";
-    }
-    console.log(distance.toFixed(2));
+function changeColor(wristDistance) {
+    let scaledWristDistance = clamp(wristDistance);
+        document.body.style.backgroundColor = `rgb(${250 * scaledWristDistance} ,60, 85)`;
+        console.log(scaledWristDistance);
+    
 }
 
 function drawWrists(canvas, body) {
     if (body) {
         // draw circle for left and right wrist
-        const leftWrist = body.getBodyPart2D(bodyPartsList.leftWrist)
-        const rightWrist = body.getBodyPart2D(bodyPartsList.rightWrist)
+        const nose = body.getBodyPart2D(bodyPartsList.nose)
+        const rightElbow = body.getBodyPart2D(bodyPartsList.rightElbow)
 
         // draw left wrist
-        drawSolidCircle(canvas, leftWrist.position.x, leftWrist.position.y, 10, 'white')
+        drawSolidCircle(canvas, nose.position.x, nose.position.y, 10, 'white')
 
         // draw right wrist
-        drawSolidCircle(canvas, rightWrist.position.x, rightWrist.position.y, 10, 'white')
+        drawSolidCircle(canvas, rightElbow.position.x, rightElbow.position.y, 10, 'white')
     }
 }
 
@@ -57,9 +60,10 @@ async function run(canvas, status) {
     continuosly(() => {
         drawImageWithOverlay(canvas, video, () => drawWrists(canvas, latestBody))
         outputDistance(status, latestBody)
+        changeColor(wristDistance);
     })
 
-    changeColor();
 }
 
 export { run }
+

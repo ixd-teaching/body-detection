@@ -10,6 +10,17 @@ export function clamp(v, min = 0, max = 1) {
   return v;
 }
 
+// Scales an input value from a source range to a destination range.
+// By default maps to percentage scale: 
+//   scale(5, 0, 10) gives 0.5 (50%)
+export function scale(v, sourceMin, sourceMax, destMin = 0, destMax = 1) {
+  if (isNaN(v)) throw Error('value is NaN');
+  
+  // eg: scale(70, 0, 70, 0, 5) = 70 is 100% on the scale of 0-70. Mapping that to the destination range of 0-5 gives 5 (100%)
+  // eg: scale(70, 60, 80, 0, 5) = 70 is 50% on the scale of 60-80. Mapping that to the same destination of 0-5 gives 2.5 instead (50%)
+  return (v - sourceMin) * (destMax - destMin) / (sourceMax - sourceMin) + destMin;
+}
+
 export function avg(data, start = 0, end = data.length) {
   if (data === undefined) throw Error("data undefined");
   if (!Array.isArray(data)) throw Error("Expected array data");

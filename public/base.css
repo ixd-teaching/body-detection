@@ -65,3 +65,7 @@ h1 > a:visited {
   padding: 0.2em;
   border: 1px solid white;
 }
+
+#canvas {
+  opacity: 0.2;
+}
