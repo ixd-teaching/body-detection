@@ -10,30 +10,30 @@ let wristDistance = 0;
 //calculates the distance between two bodyparts
 function outputDistance(status, body) {
     if (body) {
-        const distance = body.getDistanceBetweenBodyParts3D(bodyPartsList.nose, bodyPartsList.rightElbow)
+        const distance = body.getDistanceBetweenBodyParts3D(bodyPartsList.leftWrist, bodyPartsList.rightWrist)
         status.innerText = `Distance between wrists: ${distance.toFixed(2)} m`
-        wristDistance = distance.toFixed(2)
+        wristDistance = distance
     }
 }
 
 function changeColor(wristDistance) {
     let scaledWristDistance = clamp(wristDistance);
         document.body.style.backgroundColor = `rgb(${250 * scaledWristDistance} ,60, 85)`;
-        console.log(scaledWristDistance);
+        console.log(scaledWristDistance.toFixed(2));
     
 }
 
 function drawWrists(canvas, body) {
     if (body) {
         // draw circle for left and right wrist
-        const nose = body.getBodyPart2D(bodyPartsList.nose)
-        const rightElbow = body.getBodyPart2D(bodyPartsList.rightElbow)
+        const leftWrist = body.getBodyPart2D(bodyPartsList.leftWrist)
+        const rightWrist = body.getBodyPart2D(bodyPartsList.rightWrist)
 
         // draw left wrist
-        drawSolidCircle(canvas, nose.position.x, nose.position.y, 10, 'white')
+        drawSolidCircle(canvas, leftWrist.position.x, leftWrist.position.y, 10, 'white')
 
         // draw right wrist
-        drawSolidCircle(canvas, rightElbow.position.x, rightElbow.position.y, 10, 'white')
+        drawSolidCircle(canvas, rightWrist.position.x, rightWrist.position.y, 10, 'white')
     }
 }
 
