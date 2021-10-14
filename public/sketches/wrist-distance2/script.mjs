@@ -17,9 +17,9 @@ function outputDistance(status, body) {
 }
 
 function changeColor(wristDistance) {
-    let scaledWristDistance = clamp(wristDistance);
-        document.body.style.backgroundColor = `rgb(${250 * scaledWristDistance} ,60, 85)`;
-        console.log(scaledWristDistance.toFixed(2));
+    let clampedWristDistance = clamp(wristDistance);
+        document.body.style.backgroundColor = `rgb(${250 * clampedWristDistance} ,60, 85)`;
+        console.log(clampedWristDistance.toFixed(2));
     
 }
 
