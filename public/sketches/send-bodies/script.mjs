@@ -9,7 +9,7 @@ async function run(status) {
   // creates a remote connection
   const remote = new Remote({
     // If you're running your sketch locally and connecting to a Glitch-hosted processor:
-    // url: 'wss://your-project.glitch.me/ws'
+  url: 'wss://perpetual-eight-steel.glitch.me/ws'
   })
   status.innerHTML = 'Setting up camera feed...'
 
