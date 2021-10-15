@@ -31,7 +31,7 @@ async function run(status) {
     for (let bodyObject of generator) {
       // sending data
       remote.send(bodyObject)
-   
+
       // log data to console so we can see what is sent
       console.log(`Body id: ${bodyObject.id}`)
       bodyObject.bodyParts3D.forEach(bodyPart => {

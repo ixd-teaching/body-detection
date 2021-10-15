@@ -17,6 +17,13 @@ function drawSolidCircle(canvas, x, y, radius, color, opacity) {
    ctx.fill()
 }
 
+function drawCircle(canvas, x, y, radius) {
+   var ctx = canvas.getContext("2d");
+   ctx.beginPath();
+   ctx.arc(x, y, radius, 0, 2 * Math.PI);
+   ctx.stroke();
+}
+
 function drawStar(canvas, cx, cy, spikes, outerRadius, innerRadius, color, opacity) {
    const ctx = canvas.getContext("2d")
    const step = Math.PI / spikes

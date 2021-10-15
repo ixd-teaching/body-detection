@@ -37,6 +37,12 @@ function drawWrists(canvas, body) {
     }
 }
 
+function circle(canvas, body){
+    if(wristDistance <= 0.2) {
+    drawCircle(canvas, leftEar.position.x + 0.2, rightEar.position.x + 02, 10,);
+    }
+}
+
 async function run(canvas, status) {
     let latestBody
 
@@ -61,6 +67,7 @@ async function run(canvas, status) {
         drawImageWithOverlay(canvas, video, () => drawWrists(canvas, latestBody))
         outputDistance(status, latestBody)
         changeColor(wristDistance);
+        circle(canvas, body);
     })
 
 }
