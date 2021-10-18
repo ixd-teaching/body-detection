@@ -1,4 +1,3 @@
-
 import { createBodyFromObject, Bodies } from '../../lib/bodydetection.mjs'
 import { Remote } from "https://unpkg.com/@clinth/remote@latest/dist/index.mjs";
 
@@ -6,7 +5,7 @@ function run(status) {
 
   const remote = new Remote({
     // If you're running your sketch locally and connecting to a Glitch-hosted processor:
-    // url: 'wss://your-project.glitch.me/ws'
+    url: 'wss://perpetual-eight-steel.glitch.me/ws'
   })
 
   const bodies = new Bodies([]) // create empty list of bodies
