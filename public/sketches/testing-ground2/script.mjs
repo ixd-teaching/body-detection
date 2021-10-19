@@ -50,11 +50,8 @@ class FlowFieldEffect {
         this.#width = width;
         this.#height = height;
         this.angle = 0;
-
-    
-    
-
     }
+    
     #draw(x, y) {
         const length = 300;
         this.#ctx.beginPath();
@@ -76,26 +73,26 @@ class FlowFieldEffect {
 
 async function run(canvas, status) {
     let latestBody
-  
+
     // create a video element connected to the camera 
     status.innerText = 'Setting up camera feed...'
     const video = await createCameraFeed(canvas.width, canvas.height, facingMode.environment)
-  
+
     const config = {
-      video: video,
-      multiPose: false,
-      sampleRate: 100,
+    video: video,
+    multiPose: false,
+    sampleRate: 100,
       flipHorizontal: true // true if webcam
     }
 
     status.innerText = 'Loading model...'
     // start detecting bodies camera-feed a set latestBody to first (and only) body
     detectBodies(config, (e) => latestBody = e.detail.bodies.listOfBodies[0])
-  
+
     // draw video with nose and eyes overlaid onto canvas continuously and output speed of nose
     continuosly(() => {
         if (latestBody)
-          getNoseX(latestBody);
+        getNoseX(latestBody);
     })
-  }
-  export { run }
+}
+export { run }

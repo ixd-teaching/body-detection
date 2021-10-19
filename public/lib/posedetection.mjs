@@ -18,7 +18,7 @@ class PoseDetector {
       // use PoseNet if detecting more than one pose, otherwise use BlazePose to enable pose detection in 3D 
       if (multiPose) {
          const detectorConfig = {
-            modelType: poseDetection.movenet.modelType.MULTIPOSE_LIGHTNING,
+            modelType: poseDetection.movement.modelType.MULTIPOSE_LIGHTNING,
             enableTracking: true
          }
          this.detector = await poseDetection.createDetector(poseDetection.SupportedModels.MoveNet, detectorConfig)
