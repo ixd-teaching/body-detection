@@ -25,7 +25,7 @@ const bodyPartNames = () => Object.values(bodyPartsList)
 // represents data of a 2D bodypart
 class BodyPart2D {
     name
-    position // in px
+    position // in px {x:, y: }
     speed // in px/s
     confidenceScore
 
