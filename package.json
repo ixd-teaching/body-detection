@@ -26,8 +26,5 @@
       "pug": "3.0.2",
       "serve-favicon": "~2.5.0",
       "ws": "^7.4.3"
-   },
-   "devDependencies": {
-      "snowpack": "^3.8.8"
    }
 }

@@ -76,11 +76,13 @@ class Body {
     bodyParts2D
     bodyParts3D
     id
+    deviceId = null // optional device id
 
-    constructor(id, bodyParts2D, bodyParts3D) {
+    constructor(id, bodyParts2D, bodyParts3D, deviceId) {
         this.bodyParts2D = bodyParts2D
         this.bodyParts3D = bodyParts3D
         this.id = id
+        this.deviceId = deviceId
     }
 
     has3DBodyParts() {
@@ -98,6 +100,13 @@ class Body {
         return result
     }
 
+    // returns id:deviceid
+    getFullId() {
+        if (this.deviceId)
+            return this.id.toString() + ":" + this.deviceId
+        else
+            return this.id.toString()
+    }
 
     getBodyPart2D(name) {
         return this.#getBodyPart(name, this.bodyParts2D)
@@ -120,19 +129,21 @@ class Body {
         return {
             id: this.id,
             bodyParts2D: this.bodyParts2D.map((bodyPart2D) => bodyPart2D.toObject()),
-            bodyParts3D: this.bodyParts3D ? this.bodyParts3D.map((bodyPart3D) => bodyPart3D.toObject()) : null
+            bodyParts3D: this.bodyParts3D ? this.bodyParts3D.map((bodyPart3D) => bodyPart3D.toObject()) : [],
+            deviceId: this.deviceId
         }
     }
 }
 
 function createBodyFromObject(bodyObject) {
+
     return new Body(
         bodyObject.id,
         bodyObject.bodyParts2D.map(bp => new BodyPart2D({ name: bp.name, position: bp.position, speed: bp.speed, confidenceScore: bp.confidenceScore })),
-        bodyObject ? bodyObject.bodyParts3D.map(bp => new BodyPart3D({ name: bp.name, position: bp.position, speed: bp.speed, confidenceScore: bp.confidenceScore })) : null
+        bodyObject ? bodyObject.bodyParts3D.map(bp => new BodyPart3D({ name: bp.name, position: bp.position, speed: bp.speed, confidenceScore: bp.confidenceScore })) : null,
+        bodyObject.deviceId
     )
 }
-
 
 // translate posenet data to 'Body' type -- prevPose is necessary to calculate change in pose (speed)
 function constructBody(id, prevPose, currPose, timeLapsed) {
@@ -189,7 +200,7 @@ function constructBody(id, prevPose, currPose, timeLapsed) {
 
 // holds a list of bodies
 class Bodies {
-    listOfBodies
+    listOfBodies // array of Body
 
     constructor(bodies) {
         this.listOfBodies = bodies
@@ -197,6 +208,10 @@ class Bodies {
 
     getBody(id) {
         return this.listOfBodies.find(body => body.id === id)
+    }
+
+    getBodyFullId(fullId) {
+        return this.listOfBodies.find(body => body.fullId === fullId)
     }
 
     getDistanceBetweenBodyParts2D({ id1, bodyPartName1, id2, bodyPartName2 }) {
@@ -211,14 +226,44 @@ class Bodies {
         return getDistanceBetweenBodyParts2D(body1, bodyPartName1, body2, bodyPartName2)
     }
 
-    // update body data if body already exists, otherwise add body to list
-    updateBody(newBody) {
-        for (let i = 0; i < this.listOfBodies.length; i++)
-            if (this.listOfBodies[i].id.localeCompare(newBody.id) === 0) {
-                this.listOfBodies[i] = newBody
-                return
-            }
-        this.listOfBodies.push(newBody)
+    // update body data with new data from a particular device
+    updateBodies(newBodies, deviceId) {
+        // update existing bodies with fresh data by either replacing them with new ones
+        if (this.listOfBodies.length > 0) {
+            this.listOfBodies.forEach((body, index) => {
+                const newBodyIndex = newBodies.findIndex(newBody => (newBody.getFullId() === body.getFullId()))
+                if (newBodyIndex != -1)
+                    this.listOfBodies[index] = newBodies[newBodyIndex]
+            })
+ 
+        }
+        // add new bodies that don't exist
+        newBodies.forEach((newBody) => {
+            const bodyIndex = this.listOfBodies.findIndex(body => (newBody.getFullId() === body.getFullId()))
+            if (bodyIndex == -1)
+                this.listOfBodies.push(newBody)
+
+        })
+
+        // filter out any old bodies no longer existing on the same device
+        this.listOfBodies = this.listOfBodies.filter(body => {
+            if (body.deviceId !== deviceId)
+                return true
+            else
+                return (newBodies.findIndex(newBody => (body.getFullId() === newBody.getFullId())) !== -1)
+        })
+    }
+
+
+    toArrayOfObjects() {
+        return this.listOfBodies.map(body => body.toObject())
+    }
+
+    fromArrayOfObjects(arrayOfBodyObjects, deviceId) {
+        this.updateBodies(arrayOfBodyObjects.map(bodyObject => {
+            bodyObject.deviceId = deviceId
+            return createBodyFromObject(bodyObject)
+        }), deviceId)
     }
 }
 
@@ -268,17 +313,10 @@ function detectBodies(config, onBodiesDetected) {
     bs.start()
 }
 
-function* bodiesToObjectsGenerator(bodies) {
-    for (const body of bodies)
-        yield body.toObject()
-}
-
 export {
     detectBodies,
     Body,
     Bodies,
     bodyPartsList,
-    bodyPartNames,
-    createBodyFromObject,
-    bodiesToObjectsGenerator
+    bodyPartNames
 }
