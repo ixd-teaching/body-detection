@@ -8,6 +8,7 @@ let ctx;
 let flowField;
 let flowFieldAnimation;
 
+//loads on window load. creates the canvas and gets the context also starts the animations
 window.onload = function(){
     canvas = document.getElementById('canvas1');
     ctx = canvas.getContext('2d');
@@ -17,7 +18,7 @@ window.onload = function(){
     flowField.animate(0);
 
 }
-
+// resizes the canvas at all times to match the window size
 window.addEventListener('resize', function(){
     this.cancelAnimationFrame(flowFieldAnimation);
     canvas.width = window.innerWidth;
@@ -26,20 +27,27 @@ window.addEventListener('resize', function(){
     flowField.animate(0);
 });
 
+// x,y coordinates for the nose
 const nose = {
     x: 0,
     y: 0,
 }
+
+//gets the position of your body part and converts it into x,y coordinates on the canvas
+//works the same way as a mouse
 function nosePosition(body){
     let nosePos = body.getBodyPart2D(bodyPartsList.rightWrist);
     nose.x = nosePos.position.x
     nose.y = nosePos.position.y
 }
 
+//class were we run most of our code. 
 class FlowFieldEffect {
+    //# means that the variables are private and can not be accessed outside of the class
     #ctx;
     #width;
     #height;
+    //Create a constructor that hold most of the values of how we want to paint the canvas.
     constructor(ctx, width, height){
         this.#ctx = ctx;
         this.#ctx.lineWidth = 1;
@@ -56,6 +64,7 @@ class FlowFieldEffect {
         this.vr = 0.03;
     }
 
+    //creates a gradient with multiple colors
     #createGradient(){
         this.gradient = this.#ctx.createLinearGradient(0, 0, this.#width, this.#height);
         this.gradient.addColorStop("0.1", "#ff5c33");
@@ -66,6 +75,7 @@ class FlowFieldEffect {
         this.gradient.addColorStop("0.9", "#ffff33");
     }
 
+    //How we draw the lines. We also control the length of the lines depending on the distance to the nose
     #drawLine(angle, x, y) {
         let positionX = x;
         let positionY = y;
