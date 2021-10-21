@@ -1,8 +1,3 @@
-import { detectBodies, bodyPartsList } from '../../lib/bodydetection.mjs'
-import { drawImageWithOverlay, drawSolidCircle, drawStar } from '../../lib/drawing.mjs'
-import { continuosly } from '../../lib/system.mjs'
-import { createCameraFeed, facingMode } from '../../lib/camera.mjs'
-
 let canvas;
 let ctx;
 let flowField;
@@ -26,15 +21,14 @@ window.addEventListener('resize', function(){
     flowField.animate(0);
 });
 
-const nose = {
+const mouse = {
     x: 0,
-    y: 0,
+    y: 0
 }
-function nosePosition(body){
-    let nosePos = body.getBodyPart2D(bodyPartsList.rightWrist);
-    nose.x = nosePos.position.x
-    nose.y = nosePos.position.y
-}
+window.addEventListener('mousemove', function(e){
+    mouse.x = e.x;
+    mouse.y = e.y;
+})
 
 class FlowFieldEffect {
     #ctx;
@@ -69,8 +63,8 @@ class FlowFieldEffect {
     #drawLine(angle, x, y) {
         let positionX = x;
         let positionY = y;
-        let dx = nose.x - positionX;
-        let dy = nose.y - positionY;
+        let dx = mouse.x - positionX;
+        let dy = mouse.y - positionY;
         let distance = dx * dx + dy * dy;
         if (distance > 600000) distance = 600000;
         else if (distance < 50000) distance = 50000;
@@ -107,27 +101,3 @@ class FlowFieldEffect {
         flowFieldAnimation = requestAnimationFrame(this.animate.bind(this));
     }
 }
-
-async function run(canvas, status) {
-    let latestBody
-
-    // create a video element connected to the camera 
-    const video = await createCameraFeed(window.innerWidth, window.innerHeight, facingMode.environment)
-
-    const config = {
-    video: video,
-    multiPose: false,
-    sampleRate: 100,
-      flipHorizontal: true // true if webcam
-    }
-
-    // start detecting bodies camera-feed a set latestBody to first (and only) body
-    detectBodies(config, (e) => latestBody = e.detail.bodies.listOfBodies[0])
-
-    // draw video with nose and eyes overlaid onto canvas continuously and output speed of nose
-    continuosly(() => {
-        if (latestBody)
-        nosePosition(latestBody);
-    })
-}
-export { run }

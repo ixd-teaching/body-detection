@@ -10,6 +10,7 @@ let flowFieldAnimation;
 let noseXPosition = 0;
 let noseYPosition = 0;
 
+
 window.onload = function(){
     canvas = document.getElementById('canvas');
     ctx = canvas.getContext('2d');
@@ -28,10 +29,7 @@ window.addEventListener('resize', function(){
     flowField.animate();
 });
 
-const nosemouse = {
-    x: 0,
-    y: 0,
-}
+
 
 function getNoseX(body){
     let nose = body.getBodyPart2D(bodyPartsList.nose);
@@ -45,29 +43,42 @@ class FlowFieldEffect {
     #height;
     constructor(ctx, width, height){
         this.#ctx = ctx;
-        this.#ctx.strokeStyle = 'white';
         this.#ctx.lineWidth= 3;
         this.#width = width;
         this.#height = height;
         this.angle = 0;
+        this.gradient;
+        this.#createGradient();
+        this.#ctx.strokeStyle = this.gradient;
+
     }
-    
+
+    #createGradient(){
+        this.gradient = this.#ctx.createLinearGradient(0, 0, this.#width, this.#height);
+        this.gradient.addColorStop("0.1", "#ff5c33");
+        this.gradient.addColorStop("0.2", "#ff66b3");
+        this.gradient.addColorStop("0.4", "#ccccff");
+        this.gradient.addColorStop("0.6", "#b3ffff");
+        this.gradient.addColorStop("0.8", "#80ff80");
+        this.gradient.addColorStop("0.9", "#ffff33");
+    }
+
     #draw(x, y) {
         const length = 300;
         this.#ctx.beginPath();
         this.#ctx.moveTo(x,y);
-        this.#ctx.lineTo(noseXPosition, noseYPosition);
+        this.#ctx.lineTo(this.#width/2, this.#height/2);
         this.#ctx.stroke();
         console.log(noseXPosition, noseYPosition);
 
     }
     animate(){
-        this.angle += 0.1;
-        //this.#ctx.clearRect(0, 0, this.#width,this.#height);
-        this.#draw(this.#width/2, this.#height/2);
+        //this.angle += 0.1;
+        //this.#ctx.clearRect(0, 0, this.#width ,this.#height);
+        this.#draw(noseXPosition, noseYPosition);
        // console.log('animating');
         flowFieldAnimation = requestAnimationFrame(this.animate.bind(this));
-        
+
     }
 }
 
@@ -76,7 +87,7 @@ async function run(canvas, status) {
 
     // create a video element connected to the camera 
     status.innerText = 'Setting up camera feed...'
-    const video = await createCameraFeed(canvas.width, canvas.height, facingMode.environment)
+    const video = await createCameraFeed(window.innerWidth, window.innerHeight, facingMode.environment)
 
     const config = {
     video: video,
