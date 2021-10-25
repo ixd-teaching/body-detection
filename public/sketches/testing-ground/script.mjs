@@ -60,6 +60,8 @@ class FlowFieldEffect {
         this.gradient;
         this.#createGradient();
         this.#ctx.strokeStyle = this.gradient;
+
+        //controls the animation/curvage of the lines
         this.radius = 0;
         this.vr = 0.03;
     }
@@ -91,6 +93,11 @@ class FlowFieldEffect {
         this.#ctx.stroke();
 
     }
+
+    //runs all the time
+    //draws everything and updates the canvas between every drawing
+    //its also caped to only draw 60 times a second as to not use unessecary computation power
+    //this can also be changed depending on how fast your computer is but generally there's no point in doing it
     animate(timeStamp){
         const deltaTime = timeStamp - this.lastTime;
         this.lastTime = timeStamp;
@@ -113,11 +120,11 @@ class FlowFieldEffect {
         } else {
             this.timer += deltaTime;
         }
-        
+        //loops the function. You have to bind .this otherwise it forgets what we are looking for
         flowFieldAnimation = requestAnimationFrame(this.animate.bind(this));
     }
 }
-
+// sets up the camera feed.
 async function run(canvas, status) {
     let latestBody
 
