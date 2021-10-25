@@ -31,6 +31,8 @@ window.addEventListener('resize', function(){
 
 
 
+
+
 function getNoseX(body){
     let nose = body.getBodyPart2D(bodyPartsList.nose);
     noseXPosition = nose.position.x
