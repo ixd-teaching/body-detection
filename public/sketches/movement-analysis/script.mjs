@@ -20,7 +20,7 @@ async function run(canvas, status) {
     sampleRate: 100
   }
 
-  const enabledBodyParts = [bodyPartsList.nose]
+  const enabledBodyParts = [bodyPartsList.rightWrist]
   const analyzeBodyMovement = new AnalyzeBodyMovement(enabledBodyParts, 0.1)
   status.innerHTML = 'Loading model...'
   detectBodies(config, (e) => {
