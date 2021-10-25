@@ -1,0 +1,30 @@
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Analysis of body movement</title>
+</head>
+
+<script type="module">
+    import { run } from './script.mjs'
+    run(document.getElementById('canvas'), document.getElementById('status'))
+</script>
+
+<style>
+    #status {
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 12;
+    }
+
+    #log {
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 12;
+    }
+</style>
+
+<body>
+<canvas id="canvas" width="640" height="480"></canvas>
+<div id="status"></div>
+</body>
+
+</html>

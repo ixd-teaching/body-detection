@@ -4,14 +4,6 @@
   import { Remote } from "https://unpkg.com/@clinth/remote@latest/dist/index.mjs";
 
   async function run(status) {
-
-    function sleep(miliseconds) {
-      var currentTime = new Date().getTime();
-
-      while (currentTime + miliseconds >= new Date().getTime()) {
-      }
-    }
-
     // creates a remote connection
     const remote = new Remote({
       // If you're running your sketch locally and connecting to a Glitch-hosted processor:
@@ -22,7 +14,7 @@
     status.innerHTML = 'Setting up camera feed...'
 
     // create a video element connected to the camera feed
-    const video = await createCameraFeed(680, 480, facingMode.environmnent)
+    const video = await createCameraFeed(680, 480, facingMode.environment)
 
     // configuration of machine learning framework
     const config = {

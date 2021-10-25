@@ -1,6 +1,8 @@
 import { pipe, fromEvent } from 'https://cdn.skypack.dev/rxjs'
 import { map, pairwise } from 'https://cdn.skypack.dev/rxjs/operators'
 import { PoseDectorFromVideo } from '../../lib/posedetection.mjs'
+import { Queue } from './system.mjs'
+import { calcDistance2D3D, calcSpeed2D3D } from './math.mjs'
 
 const bodyPartsList = {
     nose: "nose", leftEye: "left_eye", leftEyeInner: "left_eye_inner", leftEyeOuter: "left_eye_outer", rightEyeInner: "right_eye_inner",
@@ -51,26 +53,22 @@ class BodyPart3D {
     }
 }
 
-function getDistanceBetweenBodyParts2D(bodyPart1, bodyPart2) {
-    if (bodyPart1 !== null && bodyPart1 !== undefined && bodyPart2 !== null && bodyPart2 !== undefined) {
-        const distanceX = bodyPart1.position.x - bodyPart2.position.x
-        const distanceY = bodyPart1.position.y - bodyPart2.position.y
-        return Math.hypot(distanceX, distanceY)
+function getDistanceBetweenBodyParts(bodyPart1, bodyPart2) {
+    if (bodyPart1 && bodyPart2) {
+        return calcDistance2D3D(bodyPart1.position, bodyPart2.position).absoluteDistance
     } else {
         return 0
     }
 }
 
-function getDistanceBetweenBodyParts3D(bodyPart1, bodyPart2) {
-    if (bodyPart1 !== null && bodyPart1 !== undefined && bodyPart2 !== null && bodyPart2 !== undefined) {
-        const distanceX = bodyPart1.position.x - bodyPart2.position.x
-        const distanceY = bodyPart1.position.y - bodyPart2.position.y
-        const distanceZ = bodyPart1.position.z - bodyPart2.position.z
-        return Math.hypot(distanceX, distanceY, distanceZ)
-    } else {
-        return 0
-    }
+function getDistanceBetweenBodyParts2D(bodyPart1, bodyPart2) {
+    return getDistanceBetweenBodyParts(bodyPart1, bodyPart2)
 }
+
+function getDistanceBetweenBodyParts3D(bodyPart1, bodyPart2) {
+    return getDistanceBetweenBodyParts(bodyPart1, bodyPart2)
+}
+
 // represents a body with bodyparts with 3D data optional depending on TF model used
 class Body {
     bodyParts2D
@@ -146,25 +144,17 @@ function createBodyFromObject(bodyObject) {
 }
 
 // translate posenet data to 'Body' type -- prevPose is necessary to calculate change in pose (speed)
-function constructBody(id, prevPose, currPose, timeLapsed) {
+function constructBody(id, prevPose, currPose, prevTime, currTime) {
+    const timeElapsed = (currTime - prevTime) / 1000 // in seconds
     const bodyParts2D = []
     // create 2D body parts from keypoints
     currPose.keypoints.forEach((curr, i) => {
         const prev = prevPose.keypoints[i]
-        // calculates speed
-        const distanceX = curr.x - prev.x
-        const distanceY = curr.y - prev.y
-        const speedX = Math.round(distanceX / (timeLapsed / 1000))
-        const speedY = Math.round(distanceY / (timeLapsed / 1000))
-        const speed = {
-            vector: { x: speedX, y: speedY },
-            absoluteSpeed: Math.round(Math.hypot(speedX, speedY))
-        }
         bodyParts2D.push(new BodyPart2D(
             {
                 name: curr.name,
                 position: { x: Math.round(curr.x), y: Math.round(curr.y) },
-                speed: speed,
+                speed: calcSpeed2D3D({ x: curr.x, y: curr.y }, { x: prev.x, y: prev.y }, timeElapsed),
                 confidenceScore: curr.score.toFixed(2)
             }))
     });
@@ -174,28 +164,17 @@ function constructBody(id, prevPose, currPose, timeLapsed) {
         bodyParts3D = []
         currPose.keypoints3D.forEach((curr, i) => {
             const prev = prevPose.keypoints3D[i]
-            // calculates speed
-            const distanceX = curr.x - prev.x
-            const distanceY = curr.y - prev.y
-            const distanceZ = curr.z - prev.z
-            const speedX = distanceX / (timeLapsed / 1000)
-            const speedY = distanceY / (timeLapsed / 1000)
-            const speedZ = distanceZ / (timeLapsed / 1000)
-            const speed = {
-                vector: { x: speedX, y: speedY, speedZ: speedZ },
-                absoluteSpeed: Math.hypot(speedX, speedY, speedZ)
-            }
             bodyParts3D.push(new BodyPart3D(
                 {
                     name: curr.name,
                     position: { x: curr.x, y: curr.y, z: curr.z },
-                    speed: speed,
+                    speed: calcSpeed2D3D({ x: curr.x, y: curr.y, z: curr.z }, { x: prev.x, y: prev.y, z: prev.z }, timeElapsed),
                     confidenceScore: curr.score.toFixed(2)
                 }))
         })
     }
 
-    return new Body(id, bodyParts2D, bodyParts3D)
+    return new Body(id, bodyParts2D, bodyParts3D, currTime)
 }
 
 // holds a list of bodies
@@ -228,14 +207,14 @@ class Bodies {
 
     // update body data with new data from a particular device
     updateBodies(newBodies, deviceId) {
-        // update existing bodies with fresh data by either replacing them with new ones
+        // update existing bodies with fresh data by replacing them
         if (this.listOfBodies.length > 0) {
             this.listOfBodies.forEach((body, index) => {
                 const newBodyIndex = newBodies.findIndex(newBody => (newBody.getFullId() === body.getFullId()))
                 if (newBodyIndex != -1)
                     this.listOfBodies[index] = newBodies[newBodyIndex]
             })
- 
+
         }
         // add new bodies that don't exist
         newBodies.forEach((newBody) => {
@@ -254,7 +233,6 @@ class Bodies {
         })
     }
 
-
     toArrayOfObjects() {
         return this.listOfBodies.map(body => body.toObject())
     }
@@ -264,6 +242,125 @@ class Bodies {
             bodyObject.deviceId = deviceId
             return createBodyFromObject(bodyObject)
         }), deviceId)
+    }
+}
+
+const movementState = { resting: 'resting', moving: 'moving' }
+
+const defaultStartPosPrecision2D = 10  //in px
+const defaultStartPosPrecision3D = 0.05 // in meter
+
+/*
+
+Spec: 
+It should be able to track movement of body parts, so that we are able to:
+
+- Done: know bodyparts 'movement state': 'at rest' or 'moving'
+- Done: know the last time(s) and position(s) a bodypart was at rest
+- know the distance travelled by a body part since last rest
+- know when a body parts returns to same position and emit an event    
+
+ */
+
+class AnalyzedBodyPart {
+    bodyPart
+    timestamp
+    movingAway
+    distanceFromStartPos
+    timeFromStart
+
+    constructor({ bodyPart, timestamp, movingAway, distanceFromStartPos, timeFromStart }) {
+        this.bodyPart = bodyPart
+        this.timestamp = timestamp
+        this.movingAway = movingAway
+        this.distanceFromStartPos = distanceFromStartPos
+        this.timeFromStart = timeFromStart
+    }
+}
+
+class AnalyzeBodyPartMovement extends EventTarget {
+    bodyPartTimeSeries
+    startPos
+    startTime
+    startPosPrecision
+    atStartPos
+
+    constructor(length, startPosPrecision) {
+        super()
+        this.bodyPartTimeSeries = new Queue(length)
+        this.startPosPrecision = startPosPrecision
+    }
+
+    analyze(bodyPart) {
+        const now = Date.now()
+        const oldState = this.currentState
+        let movingAway
+        if (this.bodyPartTimeSeries.length == 0) {
+            this.startTime = now
+            this.startPos = bodyPart.position
+            this.atStartPos = true
+            movingAway = false
+        }
+        else {
+            const prevAnalysedBodyPart = this.bodyPartTimeSeries.items[this.bodyPartTimeSeries.length - 1]
+            const distanceDiff = calcDistance2D3D(bodyPart.position, this.startPos).absoluteDistance.toFixed(2) - prevAnalysedBodyPart.distanceFromStartPos.toFixed(2)
+            if (distanceDiff !== 0) 
+                distanceDiff > 0 ? movingAway = true : movingAway = false 
+
+        }
+        const analyzedBodyPart = new AnalyzedBodyPart({
+            bodyPart: bodyPart,
+            timestamp: now,
+            movingAway: movingAway,
+            distanceFromStartPos: calcDistance2D3D(bodyPart.position, this.startPos).absoluteDistance,
+            timeFromStart: now - this.startTime
+        })
+        this.bodyPartTimeSeries.push(analyzedBodyPart)
+        if (analyzedBodyPart.distanceFromStartPos <= this.startPosPrecision) {
+            if (!this.atStartPos) {
+                this.dispatchEvent(new CustomEvent('backAtStartPos', {
+                    detail: { analyzedBodyPart: analyzedBodyPart }
+                }))
+                this.atStartPos = true
+            }
+        }
+        else {
+            if (this.atStartPos) {
+                this.dispatchEvent(new CustomEvent('awayFromStartPos', {
+                    detail: { analyzedBodyPart: analyzedBodyPart }
+                }))
+                this.atStartPos = false
+            }
+        }
+        return analyzedBodyPart
+    }
+}
+
+class AnalyzeBodyMovement extends EventTarget {
+    analyzers = []
+    bodyPartsToAnalyze
+
+    constructor(bodyPartsToAnalyze, startPosPrecision) {
+        super()
+        this.bodyPartsToAnalyze = bodyPartsToAnalyze
+        this.bodyPartsToAnalyze.forEach(bodyPartName => {
+            const analyzer = new AnalyzeBodyPartMovement(500, startPosPrecision)
+            analyzer.addEventListener('backAtStartPos', e => this.dispatchEvent(new CustomEvent('backAtStartPos', e)))
+            this.analyzers.push({ bodyPartName: bodyPartName, analyzer: analyzer })
+            analyzer.addEventListener('awayFromStartPos', e => this.dispatchEvent(new CustomEvent('awayFromStartPos', e)))
+            this.analyzers.push({ bodyPartName: bodyPartName, analyzer: analyzer })
+        })
+    }
+    // push newest body data and estimates movement for 
+    analyze(body) {
+        const analysis = this.analyzers.reduce((analysis, analyzer) => {
+            const bodyPart = this.is2D ? body.getBodyPart2D(analyzer.bodyPartName) : body.getBodyPart3D(analyzer.bodyPartName)
+            analysis.push(analyzer.analyzer.analyze(bodyPart))
+            return analysis
+        }, [])
+        this.dispatchEvent(new CustomEvent('bodyAnalyzed', {
+            detail: { analyzedBodyParts: analysis }
+        }))
     }
 }
 
@@ -279,7 +376,7 @@ class BodyStream extends EventTarget {
             const bodies = []
             posesInCurrFrame.forEach((poseInCurrFrame, bodyIndex) => {
                 let poseInPrevFrame = bodyIndex > posesInPrevFrame.length - 1 ? poseInCurrFrame : posesInPrevFrame[bodyIndex]
-                bodies.push(constructBody(bodyIndex, poseInPrevFrame, poseInCurrFrame, pair[1].timestamp - pair[0].timestamp)) // convert a pose to a body
+                bodies.push(constructBody(bodyIndex, poseInPrevFrame, poseInCurrFrame, pair[0].timestamp, pair[1].timestamp)) // convert a pose to a body
             })
             return bodies
         }))
@@ -306,15 +403,19 @@ class BodyStream extends EventTarget {
     }
 }
 
-// start detecting bodies
+// start detecting bodies and returns a BodyStream
 function detectBodies(config, onBodiesDetected) {
     const bs = new BodyStream(config)
     bs.addEventListener('bodiesDetected', onBodiesDetected)
     bs.start()
+    return bs
 }
 
 export {
     detectBodies,
+    movementState,
+    AnalyzeBodyMovement,
+    BodyStream,
     Body,
     Bodies,
     bodyPartsList,
