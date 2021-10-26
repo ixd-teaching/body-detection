@@ -1,12 +1,14 @@
 
 import { Bodies } from '../../lib/bodydetection.mjs'
-import { Remote } from "https://unpkg.com/@clinth/remote@latest/dist/index.mjs";
+import { Remote } from "https://unpkg.com/@clinth/remote@latest/dist/index.mjs"
+import { bodyPartsList } from '../../lib/bodydetection.mjs'
+
 
 function run(status) {
 
   const remote = new Remote({
     // If you're running your sketch locally and connecting to a Glitch-hosted processor:
-    url: 'wss://perfect-elastic-thursday.glitch.me/ws'
+    url: 'wss://m3-jp-bodydetection.me/ws'
     //useSockets: true,
     //useBroadcastChannel: false
   })
@@ -26,6 +28,7 @@ function run(status) {
       status.innerHTML = 'Receiving data from 1 body...'
     else
       status.innerHTML = `Receiving data from ${bodies.listOfBodies.length} bodies...`
+    
 
     bodies.listOfBodies.forEach(body => {
       console.log(`Body id: ${body.id}`)

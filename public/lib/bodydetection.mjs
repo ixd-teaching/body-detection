@@ -73,7 +73,6 @@ function getDistanceBetweenBodyParts3D(bodyPart1, bodyPart2) {
 class Body {
     bodyParts2D
     bodyParts3D
-    id
     deviceId = null // optional device id
 
     constructor(id, bodyParts2D, bodyParts3D, deviceId) {
@@ -98,8 +97,8 @@ class Body {
         return result
     }
 
-    // returns id:deviceid
-    getFullId() {
+    // returns id:deviceId if deviceId is defined otherwise just id
+    getId() {
         if (this.deviceId)
             return this.id.toString() + ":" + this.deviceId
         else
@@ -174,7 +173,7 @@ function constructBody(id, prevPose, currPose, prevTime, currTime) {
         })
     }
 
-    return new Body(id, bodyParts2D, bodyParts3D, currTime)
+    return new Body(id, bodyParts2D, bodyParts3D)
 }
 
 // holds a list of bodies
@@ -186,23 +185,17 @@ class Bodies {
     }
 
     getBody(id) {
-        return this.listOfBodies.find(body => body.id === id)
+        return this.listOfBodies.find(body => body.getId() === id)
     }
 
-    getBodyFullId(fullId) {
-        return this.listOfBodies.find(body => body.fullId === fullId)
+    getDistanceBetweenBodyParts2D(id1, bodyPartName1, id2, bodyPartName2) {
+        return calcDistance2D3D(this.getBody(id1).getBodyPart2D(bodyPartName1).position, 
+                                this.getBody(id2).getBodyPart2D(bodyPartName2).position)
     }
 
-    getDistanceBetweenBodyParts2D({ id1, bodyPartName1, id2, bodyPartName2 }) {
-        const body1 = this.getBody(id1)
-        const body2 = this.getBody(id2)
-        return getDistanceBetweenBodyParts2D(body1, bodyPartName1, body2, bodyPartName2)
-    }
-
-    getDistanceBetweenBodyParts3D({ id1, bodyPartName1, id2, bodyPartName2 }) {
-        const body1 = this.getBody(id1)
-        const body2 = this.getBody(id2)
-        return getDistanceBetweenBodyParts2D(body1, bodyPartName1, body2, bodyPartName2)
+    getDistanceBetweenBodyParts3D(id1, bodyPartName1, id2, bodyPartName2) {
+        return calcDistance2D3D(this.getBody(id1).getBodyPart3D(bodyPartName1).position,
+                                this.getBody(id2).getBodyPart3D(bodyPartName2).position)
     }
 
     // update body data with new data from a particular device
@@ -210,7 +203,7 @@ class Bodies {
         // update existing bodies with fresh data by replacing them
         if (this.listOfBodies.length > 0) {
             this.listOfBodies.forEach((body, index) => {
-                const newBodyIndex = newBodies.findIndex(newBody => (newBody.getFullId() === body.getFullId()))
+                const newBodyIndex = newBodies.findIndex(newBody => (newBody.getId() === body.getId()))
                 if (newBodyIndex != -1)
                     this.listOfBodies[index] = newBodies[newBodyIndex]
             })
@@ -218,7 +211,7 @@ class Bodies {
         }
         // add new bodies that don't exist
         newBodies.forEach((newBody) => {
-            const bodyIndex = this.listOfBodies.findIndex(body => (newBody.getFullId() === body.getFullId()))
+            const bodyIndex = this.listOfBodies.findIndex(body => (newBody.getId() === body.getId()))
             if (bodyIndex == -1)
                 this.listOfBodies.push(newBody)
 
@@ -229,7 +222,7 @@ class Bodies {
             if (body.deviceId !== deviceId)
                 return true
             else
-                return (newBodies.findIndex(newBody => (body.getFullId() === newBody.getFullId())) !== -1)
+                return (newBodies.findIndex(newBody => (body.getId() === newBody.getId())) !== -1)
         })
     }
 
@@ -250,17 +243,6 @@ const movementState = { resting: 'resting', moving: 'moving' }
 const defaultStartPosPrecision2D = 10  //in px
 const defaultStartPosPrecision3D = 0.05 // in meter
 
-/*
-
-Spec: 
-It should be able to track movement of body parts, so that we are able to:
-
-- Done: know bodyparts 'movement state': 'at rest' or 'moving'
-- Done: know the last time(s) and position(s) a bodypart was at rest
-- know the distance travelled by a body part since last rest
-- know when a body parts returns to same position and emit an event    
-
- */
 
 class AnalyzedBodyPart {
     bodyPart

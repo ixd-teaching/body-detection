@@ -1,8 +1,12 @@
-function drawImageWithOverlay(canvas, video, drawOverlay) {
+function drawImageOnCanvas(canvas, image) {
    const ctx = canvas.getContext("2d")
    // draw current frame from the video element onto the canvas
-   ctx.drawImage(video, 0, 0, video.width, video.height)
+   ctx.drawImage(image, 0, 0, image.width, image.height)
+}
+
+function drawImageWithOverlay(canvas, video, drawOverlay) {
    // draw overlay
+   drawImageOnCanvas(canvas, video)
    drawOverlay()
 }
 
@@ -99,4 +103,4 @@ function drawBodyParts(canvas, bodies, enabledBodyPartNames, has3DData) {
    }
 }
 
-export { drawImageWithOverlay, drawSolidCircle, drawStar, drawBodyParts }
+export { drawImageOnCanvas, drawImageWithOverlay, drawSolidCircle, drawStar, drawBodyParts }

@@ -1,0 +1,26 @@
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Distance between bodies</title>
+</head>
+<style>
+  .wrapper {
+    display: grid;
+    grid-template-columns: 150px 150px 150px 150px;
+    grid-template-rows: auto auto auto;
+  }
+</style>
+
+<script type="module">
+  import { run } from './script.mjs'
+  run(document.getElementById("canvas"), document.getElementById("status"))
+</script>
+
+<body>
+  <canvas id="canvas" width="640" height="480"></canvas>
+    <div id="status"></div>
+    
+</body>
+
+</html>
