@@ -21,4 +21,5 @@ function calcSpeed2D3D(pos1, pos2, timeElapsed) {
    return result
 }
 
+
 export { calcDistance2D3D, calcSpeed2D3D }
