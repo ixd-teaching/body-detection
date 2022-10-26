@@ -4,7 +4,7 @@ import { createDetector, SupportedModels } from "https://cdn.skypack.dev/@tensor
 
 // -- private helper functions --
 
-async function mkLivePoseDetector (video, onPoses) {
+async function createLivePoseDetector (video, onPoses) {
    let canRun
    const detector = await createDetector(SupportedModels.BlazePose, {runtime: 'tfjs', enableSmoothing: true})
    async function * detect () {
@@ -27,4 +27,4 @@ async function mkLivePoseDetector (video, onPoses) {
 async function mkPoseStream () {
 
 }
-export { mkLivePoseDetector }
+export { createLivePoseDetector as mkLivePoseDetector }
