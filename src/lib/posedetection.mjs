@@ -3,18 +3,13 @@ import 'https://cdn.skypack.dev/@tensorflow/tfjs-core'
 import 'https://cdn.skypack.dev/@tensorflow/tfjs-converter'
 import 'https://cdn.skypack.dev/@tensorflow/tfjs-backend-webgl'
 
-
-// check: https://github.com/tensorflow/tfjs-models/tree/master/pose-detection/src/blazepose_tfjs
-// check: https://github.com/tensorflow/tfjs-models/tree/master/pose-detection/src/posenet
-
-
-
 class PoseDetector {
    detector
    multiPose = false
 
    async init(multiPose) {
       this.multiPose = multiPose
+
       // use PoseNet if detecting more than one pose, otherwise use BlazePose to enable pose detection in 3D 
       if (multiPose) {
          const detectorConfig = {
@@ -49,7 +44,6 @@ class PoseDectorFromVideo extends EventTarget {
    isRunning = false
    canRun = false
    intervalID
-   
 
    constructor(config) {
       super()

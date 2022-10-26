@@ -3,9 +3,7 @@
   "version": "1.0.0",
   "description": "### Description",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "scripts": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ixd-teaching/body-detection.git"
@@ -15,5 +13,13 @@
   "bugs": {
     "url": "https://github.com/ixd-teaching/body-detection/issues"
   },
-  "homepage": "https://github.com/ixd-teaching/body-detection#readme"
+  "homepage": "https://github.com/ixd-teaching/body-detection#readme",
+  "devDependencies": {
+    "typescript": "^4.8.4",
+    "@tensorflow-models/pose-detection": "^2.0.0",
+    "@tensorflow/tfjs": "^3.21.0"
+  },
+  "dependencies": {
+
+  }
 }
