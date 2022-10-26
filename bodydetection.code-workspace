@@ -1,13 +1,7 @@
 {
-	"folders": [
-		{
-			"path": "."
-		},
-		{
-			"path": "public"
-		}
-	],
-	"settings": {
-		"liveServer.settings.multiRootWorkspaceName": "public"
-	}
+    "folders": [
+        {
+            "path": "."
+        }
+    ]
 }

@@ -1,30 +1,19 @@
 {
-   "name": "ch-audio-data",
-   "author": "Clint Heyer",
-   "description": "Basic websocket server",
-   "version": "0.0.1",
-   "engines": {
-      "node": "14.x"
-   },
-   "private": true,
-   "bin": {
-      "server": "./server.js"
-   },
-   "main": "server.js",
-   "scripts": {
-      "start": "node server.js"
-   },
-   "dependencies": {
-      "body-parser": "~1.19.0",
-      "cookie-parser": "~1.4.5",
-      "debug": "~4.3.1",
-      "express": "~4.17.1",
-      "express-ws": "^4.0.0",
-      "middleware-static-livereload": "1.2.17",
-      "morgan": "~1.10.0",
-      "node-dev": "^6.4.0",
-      "pug": "3.0.2",
-      "serve-favicon": "~2.5.0",
-      "ws": "^7.4.3"
-   }
+  "name": "body-detection",
+  "version": "1.0.0",
+  "description": "### Description",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ixd-teaching/body-detection.git"
+  },
+  "author": "Jens Pedersen",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ixd-teaching/body-detection/issues"
+  },
+  "homepage": "https://github.com/ixd-teaching/body-detection#readme"
 }
