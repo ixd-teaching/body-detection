@@ -17,7 +17,7 @@ async function createLivePoseDetector(video, onPoses) {
                 onPoses(poses);
             }
         },
-        stop: () => canRun = false
+        stop: () => canRun = true
     };
 }
 async function mkPoseStream() {
