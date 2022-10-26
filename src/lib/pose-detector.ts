@@ -1,11 +1,11 @@
-import { createDetector, SupportedModels } from "https://cdn.skypack.dev/@tensorflow-models/pose-detection"
+import { createDetector, SupportedModels, Pose } from "https://cdn.skypack.dev/@tensorflow-models/pose-detection"
 
 // -- domain types
 
 // -- private helper functions --
 
-async function createLivePoseDetector (video, onPoses) {
-   let canRun
+async function createLivePoseDetector (video: HTMLVideoElement, onPoses: (poses: Pose[]) => void) {
+   let canRun: boolean
    const detector = await createDetector(SupportedModels.BlazePose, {runtime: 'tfjs', enableSmoothing: true})
    async function * detect () {
       while (true) 
