@@ -1,4 +1,4 @@
 .vscode/launch.json
 .DS_Store
 .fake
-./node_modules
+node_modules
