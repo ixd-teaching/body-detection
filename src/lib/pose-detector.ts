@@ -2,8 +2,6 @@ import { createDetector, SupportedModels } from "https://cdn.skypack.dev/@tensor
 
 // -- domain types
 
-
-
 // -- private helper functions --
 
 async function createLivePoseDetector (video, onPoses) {
