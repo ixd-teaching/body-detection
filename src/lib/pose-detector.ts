@@ -4,13 +4,13 @@ import { createDetector, SupportedModels, Pose } from "https://cdn.skypack.dev/@
 
 // -- private helper functions --
 
-async function createLivePoseDetector (video: HTMLVideoElement, onPoses: (poses: Pose[]) => void) {
-   let canRun: boolean
+async function createLiveDetector (video: HTMLVideoElement, onPoses: (poses: Pose[]) => void) {
    const detector = await createDetector(SupportedModels.BlazePose, {runtime: 'tfjs', enableSmoothing: true})
    async function * detect () {
       while (true) 
          yield await detector.estimatePoses(video, {maxPoses: 3, flipHorizontal: true})   
    } 
+   let canRun: boolean
    return {
       start: async function () {
          canRun = true
@@ -20,11 +20,11 @@ async function createLivePoseDetector (video: HTMLVideoElement, onPoses: (poses:
             onPoses(poses)
          }
       },
-      stop: () => canRun = true
+      stop: () => canRun = false
    }
 }
 
-async function mkPoseStream () {
+async function createPoseStream () {
 
 }
-export { createLivePoseDetector as mkLivePoseDetector }
+export { createLiveDetector as mkLivePoseDetector }
